@@ -27,13 +27,13 @@ async function main() {
     await seedRoles(prisma);
     const role = await prisma.role.findUniqueOrThrow({ where: { key: "super_admin" } });
     const passwordHash = await hash(password, { memoryCost: 19456, timeCost: 2, parallelism: 1 });
-    const existing = await prisma.user.findUnique({ where: { email } });
+    const forceChange = process.env.ADMIN_FORCE_PASSWORD_CHANGE !== "false"; const oldEmail = (process.env.ADMIN_OLD_EMAIL || "").toLowerCase().trim(); const old = oldEmail && oldEmail !== email ? await prisma.user.findUnique({ where: { email: oldEmail } }) : null; if (old && !(await prisma.user.findUnique({ where: { email } }))) { await prisma.user.update({ where: { id: old.id }, data: { email } }); console.log("Renamed admin " + oldEmail + " to " + email); } const existing = await prisma.user.findUnique({ where: { email } });
     if (existing) {
-      await prisma.user.update({ where: { id: existing.id }, data: { passwordHash, roleId: role.id, isActive: true, mustChangePassword: true, failedLoginCount: 0, lockedUntil: null } });
+      await prisma.user.update({ where: { id: existing.id }, data: { passwordHash, roleId: role.id, isActive: true, mustChangePassword: forceChange, failedLoginCount: 0, lockedUntil: null } });
       await prisma.session.deleteMany({ where: { userId: existing.id } });
       console.log(`✔ Reset ${email} as Super Admin (must change password at next sign-in).`);
     } else {
-      await prisma.user.create({ data: { email, name, passwordHash, roleId: role.id, emailVerifiedAt: new Date(), mustChangePassword: true } });
+      await prisma.user.create({ data: { email, name, passwordHash, roleId: role.id, emailVerifiedAt: new Date(), mustChangePassword: forceChange } });
       console.log(`✔ Created Super Admin ${email} (must change password at first sign-in).`);
     }
   } finally {
