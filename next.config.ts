@@ -30,7 +30,7 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
-  reactStrictMode: true,
+  reactStrictMode: true, experimental: { cpus: 1, workerThreads: false },
   serverExternalPackages: ["pdfkit", "@node-rs/argon2", "sharp", "mariadb"],
   images: {
     formats: ["image/avif", "image/webp"],
