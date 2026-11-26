@@ -5,7 +5,7 @@
 
 */
 -- AlterTable
-ALTER TABLE `product` ADD COLUMN `price` INTEGER NOT NULL;
+ALTER TABLE `Product` ADD COLUMN `price` INTEGER NOT NULL;
 
 -- CreateIndex
 CREATE INDEX `Product_price_idx` ON `Product`(`price`);
