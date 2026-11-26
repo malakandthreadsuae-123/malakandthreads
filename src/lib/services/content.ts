@@ -3,7 +3,7 @@ import { prisma } from "@/lib/db";
 import type { BannerPlacement } from "@/generated/prisma/client";
 
 export async function getHomepageSections() {
-  return prisma.homepageSection.findMany({ where: { isEnabled: true }, orderBy: { sortOrder: "asc" } });
+  return prisma.homepageSection.findMany({ where: { isEnabled: true }, orderBy: [{ sortOrder: "asc" }, { key: "asc" }] });
 }
 
 export async function getBanners(placement: BannerPlacement) {

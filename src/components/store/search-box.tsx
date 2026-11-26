@@ -18,7 +18,7 @@ type Suggestions = {
 const POPULAR = ["Abaya", "Pashmina shawl", "Maxi dress", "Crossbody bag", "Festive"];
 
 /** Always-visible desktop search with inline live suggestions. */
-export function SearchBox({ className }: { className?: string }) {
+export function SearchBox({ className, tone = "default" }: { className?: string; tone?: "default" | "light" }) {
   const router = useRouter();
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(false);
@@ -56,6 +56,8 @@ export function SearchBox({ className }: { className?: string }) {
 
   const showResults = q.trim().length >= 2 && data;
   const empty = showResults && !data.products.length && !data.categories.length && !data.brands.length;
+  // "light" = glass style over the hero video; switches back to solid as soon as it is in use.
+  const glass = tone === "light" && !open;
 
   return (
     <div ref={wrap} className={cn("relative", className)}>
@@ -65,9 +67,12 @@ export function SearchBox({ className }: { className?: string }) {
           e.preventDefault();
           go(q);
         }}
-        className={cn("flex h-11 items-center rounded-full border bg-white pl-4 pr-1.5 transition", open ? "border-charcoal shadow-soft" : "border-line hover:border-charcoal/40")}
+        className={cn(
+          "flex h-11 items-center rounded-full border pl-4 pr-1.5 transition-colors duration-500",
+          glass ? "border-white/30 bg-white/10 text-ivory backdrop-blur-md hover:border-white/60" : open ? "border-charcoal bg-white shadow-soft" : "border-line bg-white hover:border-charcoal/40",
+        )}
       >
-        <Search className="h-4 w-4 shrink-0 text-muted" aria-hidden />
+        <Search className={cn("h-4 w-4 shrink-0", glass ? "text-ivory/80" : "text-muted")} aria-hidden />
         <label htmlFor="header-search" className="sr-only">
           Search products, brands and categories
         </label>
@@ -78,7 +83,7 @@ export function SearchBox({ className }: { className?: string }) {
           onFocus={() => setOpen(true)}
           onKeyDown={(e) => e.key === "Escape" && setOpen(false)}
           placeholder="Search dresses, abayas, shawls, bags…"
-          className="h-full min-w-0 flex-1 bg-transparent px-3 text-[14px] outline-none placeholder:text-muted/70"
+          className={cn("h-full min-w-0 flex-1 bg-transparent px-3 text-[14px] outline-none", glass ? "placeholder:text-ivory/70" : "placeholder:text-muted/70")}
           autoComplete="off"
           maxLength={100}
         />
@@ -87,7 +92,7 @@ export function SearchBox({ className }: { className?: string }) {
             <X className="h-4 w-4" />
           </button>
         )}
-        <button type="submit" className="ml-1 flex h-8 items-center rounded-full bg-charcoal px-4 text-[11px] font-semibold uppercase tracking-[0.14em] text-ivory hover:bg-gold hover:text-charcoal">
+        <button type="submit" className={cn("ml-1 flex h-8 items-center rounded-full px-4 text-[11px] font-semibold uppercase tracking-[0.14em] transition-colors", glass ? "bg-gold text-charcoal hover:bg-ivory" : "bg-charcoal text-ivory hover:bg-gold hover:text-charcoal")}>
           Search
         </button>
       </form>

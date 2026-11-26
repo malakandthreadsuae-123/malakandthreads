@@ -7,7 +7,7 @@ import { api } from "@/lib/client-api";
 import { adminBtn, adminInput } from "./ui";
 import { MediaField } from "./forms";
 
-type Section = { key: string; title: string; subtitle: string | null; isEnabled: boolean; sortOrder: number; config: { limit?: number; category?: string; slugs?: string[]; images?: string[] } | null };
+type Section = { key: string; title: string; subtitle: string | null; isEnabled: boolean; sortOrder: number; config: { limit?: number; category?: string; slugs?: string[]; images?: string[]; video?: string; poster?: string; href?: string; cta?: string } | null };
 
 const HELP: Record<string, string> = {
   hero: "Edit the hero heading, image and video under Banners → Hero.",
@@ -15,6 +15,7 @@ const HELP: Record<string, string> = {
   trust_strip: "Delivery, Cash on Delivery, returns and WhatsApp badges (uses Settings values).",
   product_tabs: "One tabbed showcase: New Arrivals / Best Sellers / Trending (uses product flags).",
   shop_by_price: "Budget tiles: under AED 100 / 200 / 400 and luxe.",
+  video_story: "Full-width video band. Config: video (MP4 path), poster (image), href (link), cta (button text). The video loads only when scrolled near.",
   dresses: "Editorial spotlight: category image + 4 products.",
   shawls: "Editorial spotlight: category image + 4 products.",
   bags: "Editorial spotlight: category image + 4 products.",
@@ -94,6 +95,14 @@ export function SectionEditor({ section, categories }: { section: Section; categ
                 })}
               </div>
             </fieldset>
+          )}
+          {s.key === "video_story" && (
+            <>
+              <label className="text-[12px] sm:col-span-2">Video file (MP4 path or https URL)<input className={adminInput} value={cfg.video ?? ""} placeholder="/videos/story-embroidered.mp4" onChange={(e) => setCfg({ video: e.target.value })} /></label>
+              <div className="text-[12px] sm:col-span-2">Poster image (shown before the video plays)<MediaField id="vs-poster" value={cfg.poster ?? ""} onChange={(v) => setCfg({ poster: v })} /></div>
+              <label className="text-[12px]">Button link<input className={adminInput} value={cfg.href ?? ""} placeholder="/category/womens-clothing" onChange={(e) => setCfg({ href: e.target.value })} /></label>
+              <label className="text-[12px]">Button text<input className={adminInput} value={cfg.cta ?? ""} placeholder="Discover the edit" onChange={(e) => setCfg({ cta: e.target.value })} /></label>
+            </>
           )}
           {s.key === "gallery" && (
             <div className="space-y-2 sm:col-span-2">

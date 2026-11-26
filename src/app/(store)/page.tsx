@@ -15,6 +15,7 @@ import { JsonLd, SectionHeading } from "@/components/ui/primitives";
 import { Gallery, NewsletterBand, PromoBanners, SeasonalSplit, ServicePromise, Testimonials, WhatsAppBand } from "@/components/store/home-sections";
 import { CategoryCircles, ProductTabs } from "@/components/store/home-extra";
 import { BrandGrid, CategorySpotlight, ShopByPrice, TrustStrip } from "@/components/store/home-editorial";
+import { VideoStory } from "@/components/store/video-story";
 
 export const dynamic = "force-dynamic";
 
@@ -24,20 +25,20 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 const FALLBACK_HERO: HeroData = {
-  eyebrow: "MALAKAND THREADS",
-  title: "Elegance, Curated for the Emirates",
-  subtitle: "Women's dresses, premium shawls and fashion bags — delivered across the UAE.",
-  imageUrl: "/images/hero-poster.webp",
+  eyebrow: "The Embroidered Edit · UAE",
+  title: "Elegance, Woven for the Emirates",
+  subtitle: "Designer dresses, premium shawls and statement bags — delivered across all seven emirates.",
+  imageUrl: "/images/hero-embroidered.webp",
   mobileImageUrl: null,
-  videoUrl: null,
-  imageAlt: "Woman wearing an elegant abaya",
+  videoUrl: "/videos/hero-embroidered.mp4",
+  imageAlt: "Model in an embroidered teal outfit with traditional gold jewellery",
   ctaLabel: "Shop Now",
   ctaHref: "/shop",
   cta2Label: "Explore Collections",
   cta2Href: "/collections",
 };
 
-type Cfg = { limit?: number; category?: string; slugs?: string[]; images?: string[] };
+type Cfg = { limit?: number; category?: string; slugs?: string[]; images?: string[]; video?: string; poster?: string; href?: string; cta?: string };
 
 export default async function HomePage() {
   const [settings, sections, heroBanners] = await Promise.all([getSettings(), getHomepageSections(), getBanners("HERO")]);
@@ -105,6 +106,8 @@ export default async function HomePage() {
           const reverse = spotlightIndex++ % 2 === 1;
           return <CategorySpotlight key={s.key} title={s.title} subtitle={s.subtitle} slug={cfg.category} image={cat?.image ?? null} products={products} reverse={reverse} />;
         }
+        case "video_story":
+          return <VideoStory key={s.key} title={s.title} subtitle={s.subtitle} video={cfg.video} poster={cfg.poster} href={cfg.href} cta={cfg.cta} />;
         case "shop_by_price":
           return <ShopByPrice key={s.key} title={s.title} />;
         case "promo_banners":

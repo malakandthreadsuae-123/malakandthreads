@@ -23,5 +23,5 @@ const overlay = Buffer.from(`<svg width="1200" height="630" xmlns="http://www.w3
 await sharp(photo).composite([{ input: overlay }]).jpeg({ quality: 82, mozjpeg: true }).toFile("public/brand/og-image.jpg");
 
 // Hero poster for the video (first paint / mobile)
-await sharp("public/images/demo/dress-09.webp").resize(1600, 900, { fit: "cover", position: "attention" }).webp({ quality: 72 }).toFile("public/images/hero-poster.webp");
+// Hero poster: public/images/hero-embroidered.webp is a frame of the hero video (see docs/MEDIA_CREDITS.md).
 console.log("brand assets generated");

@@ -24,7 +24,7 @@ test("homepage renders hero, sections and structured data without errors", async
 
 test("canonical URLs always use the production domain", async ({ page }) => {
   await page.goto("/category/shawls");
-  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://malakandtradesuae.com/category/shawls");
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://malakandthreadsuae.com/category/shawls");
   await page.goto("/category/shawls?sort=price_asc");
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
 });
@@ -120,9 +120,9 @@ test("unknown pages return a real 404", async ({ request }) => {
 test("robots.txt and sitemap.xml are served with production URLs", async ({ request }) => {
   const robots = await (await request.get("/robots.txt")).text();
   expect(robots).toContain("Disallow: /admin");
-  expect(robots).toContain("Sitemap: https://malakandtradesuae.com/sitemap.xml");
+  expect(robots).toContain("Sitemap: https://malakandthreadsuae.com/sitemap.xml");
   const sitemap = await (await request.get("/sitemap.xml")).text();
-  expect(sitemap).toContain("<loc>https://malakandtradesuae.com/product/");
+  expect(sitemap).toContain("<loc>https://malakandthreadsuae.com/product/");
   expect(sitemap).not.toContain("localhost");
 });
 

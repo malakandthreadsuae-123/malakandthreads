@@ -73,8 +73,14 @@ export function SectionHeading({ eyebrow, title, subtitle, action, align = "left
   return (
     <div className={cn("mb-8 flex flex-col gap-4 sm:mb-10", align === "center" ? "items-center text-center" : "sm:flex-row sm:items-end sm:justify-between")}>
       <div className={cn(align === "center" && "max-w-2xl")}>
-        {eyebrow && <p className="eyebrow mb-3">{eyebrow}</p>}
-        <Tag className="text-3xl leading-tight sm:text-4xl">{title}</Tag>
+        {eyebrow && (
+          <p className={cn("eyebrow mb-3 flex items-center gap-3", align === "center" && "justify-center")}>
+            <span aria-hidden className="h-px w-7 bg-gold" />
+            {eyebrow}
+            {align === "center" && <span aria-hidden className="h-px w-7 bg-gold" />}
+          </p>
+        )}
+        <Tag className="text-3xl leading-tight tracking-[-0.01em] sm:text-[42px]">{title}</Tag>
         {subtitle && <p className="mt-3 text-[15px] text-muted">{subtitle}</p>}
       </div>
       {action && (

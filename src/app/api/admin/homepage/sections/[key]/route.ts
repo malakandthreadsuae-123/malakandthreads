@@ -10,6 +10,10 @@ const configSchema = z
     category: z.string().max(140).optional(),
     slugs: z.array(z.string().max(140)).max(12).optional(),
     images: z.array(z.string().max(500).refine((u) => u.startsWith("/") || u.startsWith("https://"), "Invalid image URL")).max(12).optional(),
+    video: z.string().max(500).refine((u) => u.startsWith("/") || u.startsWith("https://"), "Invalid URL").optional(),
+    poster: z.string().max(500).refine((u) => u.startsWith("/") || u.startsWith("https://"), "Invalid URL").optional(),
+    href: z.string().max(300).refine((u) => u.startsWith("/") || u.startsWith("https://"), "Link must start with / or https://").optional(),
+    cta: z.string().trim().max(40).optional(),
   })
   .strict();
 

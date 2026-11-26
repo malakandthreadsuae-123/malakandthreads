@@ -107,33 +107,59 @@ export function ShopByPrice({ title }: { title: string }) {
 /** Brand grid with monogram cards. */
 export function BrandGrid({ title, subtitle, brands }: { title: string; subtitle?: string | null; brands: { name: string; slug: string; logo: string | null }[] }) {
   if (!brands.length) return null;
+  const ribbon = [...brands, ...brands];
   return (
-    <section className="bg-white py-16 sm:py-20" aria-label={title}>
+    <section className="relative isolate overflow-hidden bg-charcoal py-20 text-ivory sm:py-24" aria-label={title}>
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(60%_50%_at_50%_0%,rgba(197,164,109,0.18),transparent_70%)]" aria-hidden />
+
+      {/* Slow ribbon of label names (decorative; the links below are the real navigation) */}
+      <div className="mb-14 overflow-hidden border-y border-white/10 py-5" aria-hidden>
+        <div className="flex w-max animate-marquee">
+          {ribbon.map((b, i) => (
+            <span key={i} className="flex items-center gap-10 pr-10 font-serif text-3xl italic text-ivory/25 sm:text-4xl">
+              {b.name}
+              <span className="text-[14px] not-italic text-gold/70">✦</span>
+            </span>
+          ))}
+        </div>
+      </div>
+
       <div className="container-luxe">
-        <Reveal className="mb-10 flex flex-col items-center text-center">
-          <p className="eyebrow mb-3">Labels we love</p>
-          <h2 className="text-3xl sm:text-4xl">{title}</h2>
-          {subtitle && <p className="mt-3 text-[15px] text-muted">{subtitle}</p>}
+        <Reveal className="mb-12 flex flex-col items-center text-center">
+          <p className="mb-4 flex items-center gap-4 text-[11px] font-medium uppercase tracking-[0.34em] text-gold">
+            <span aria-hidden className="h-px w-8 bg-gold/70" />
+            Labels we love
+            <span aria-hidden className="h-px w-8 bg-gold/70" />
+          </p>
+          <h2 className="text-4xl sm:text-5xl">{title}</h2>
+          {subtitle && <p className="mt-4 max-w-xl text-[15px] text-ivory/65">{subtitle}</p>}
         </Reveal>
-        <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
+        <ul className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
           {brands.map((b, i) => (
             <li key={b.slug}>
-              <Reveal delay={(i % 4) * 0.05}>
-                <Link href={`/brands/${b.slug}`} className="group flex h-28 flex-col items-center justify-center gap-2 rounded-xl border border-line bg-ivory px-3 transition-all duration-300 hover:-translate-y-0.5 hover:border-gold hover:bg-white hover:shadow-card sm:h-32">
+              <Reveal delay={(i % 4) * 0.06}>
+                <Link
+                  href={`/brands/${b.slug}`}
+                  className="group relative flex h-32 flex-col items-center justify-center gap-3 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] px-3 text-center transition-all duration-500 hover:-translate-y-1 hover:border-gold/60 hover:bg-white/[0.07] sm:h-40"
+                >
+                  <span aria-hidden className="absolute inset-x-6 top-0 h-px origin-center scale-x-0 bg-gradient-to-r from-transparent via-gold to-transparent transition-transform duration-700 group-hover:scale-x-100" />
                   {b.logo ? (
-                    <Image src={b.logo} alt={b.name} width={140} height={56} className="max-h-12 w-auto object-contain" />
+                    <Image src={b.logo} alt={b.name} width={140} height={56} className="max-h-12 w-auto object-contain brightness-0 invert" />
                   ) : (
-                    <>
-                      <span className="font-serif text-xl tracking-[0.08em] sm:text-2xl">{b.name}</span>
-                      <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-muted transition-colors group-hover:text-gold-dark">Shop collection</span>
-                    </>
+                    <span className="font-serif text-[22px] tracking-[0.06em] sm:text-[28px]">{b.name}</span>
                   )}
+                  <span className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.26em] text-ivory/50 transition-colors duration-300 group-hover:text-gold">
+                    Shop collection <ArrowRight className="h-3 w-3 -translate-x-1 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100" aria-hidden />
+                  </span>
                 </Link>
               </Reveal>
             </li>
           ))}
         </ul>
-        <p className="mt-6 text-center text-[12px] text-muted">MALAKAND THREADS is an independent retailer. Brand names describe the products offered and do not imply official partnership.</p>
+        <div className="mt-12 flex flex-col items-center gap-5">
+          <Link href="/brands" className="btn-outline-light">View all brands</Link>
+          <p className="max-w-2xl text-center text-[12px] text-ivory/45">MALAKAND THREADS is an independent retailer. Brand names describe the products offered and do not imply official partnership.</p>
+        </div>
       </div>
     </section>
   );

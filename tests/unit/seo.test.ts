@@ -10,20 +10,20 @@ describe("site URL", () => {
   it("never leaks localhost/staging in production", () => {
     vi.stubEnv("NODE_ENV", "production");
     vi.stubEnv("NEXT_PUBLIC_SITE_URL", "http://localhost:3000");
-    expect(siteUrl()).toBe("https://malakandtradesuae.com");
+    expect(siteUrl()).toBe("https://malakandthreadsuae.com");
     vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://staging.example.hostingersite.com");
-    expect(siteUrl()).toBe("https://malakandtradesuae.com");
-    vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://malakandtradesuae.com/");
-    expect(absoluteUrl("/shop")).toBe("https://malakandtradesuae.com/shop");
+    expect(siteUrl()).toBe("https://malakandthreadsuae.com");
+    vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://malakandthreadsuae.com/");
+    expect(absoluteUrl("/shop")).toBe("https://malakandthreadsuae.com/shop");
   });
 });
 
 describe("buildMetadata", () => {
   it("sets canonical, OG and twitter tags", () => {
-    vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://malakandtradesuae.com");
+    vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://malakandthreadsuae.com");
     const m = buildMetadata({ title: "Shawls", description: "Buy shawls in the UAE", path: "/category/shawls" });
-    expect(m.alternates?.canonical).toBe("https://malakandtradesuae.com/category/shawls");
-    expect((m.openGraph as { url: string }).url).toBe("https://malakandtradesuae.com/category/shawls");
+    expect(m.alternates?.canonical).toBe("https://malakandthreadsuae.com/category/shawls");
+    expect((m.openGraph as { url: string }).url).toBe("https://malakandthreadsuae.com/category/shawls");
     expect(m.robots).toBeUndefined();
   });
   it("truncates long descriptions to ~160 chars", () => {
@@ -38,10 +38,10 @@ describe("buildMetadata", () => {
 
 describe("listing metadata", () => {
   it("is indexable and self-canonical for clean and paginated URLs", () => {
-    vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://malakandtradesuae.com");
+    vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://malakandthreadsuae.com");
     expect(listingMetadata({ title: "Bags", description: "d", path: "/category/bags", sp: {} }).robots).toBeUndefined();
     const p2 = listingMetadata({ title: "Bags", description: "d", path: "/category/bags", sp: { page: "2" } });
-    expect(p2.alternates?.canonical).toBe("https://malakandtradesuae.com/category/bags?page=2");
+    expect(p2.alternates?.canonical).toBe("https://malakandthreadsuae.com/category/bags?page=2");
   });
   it("noindexes filtered and sorted variations", () => {
     const m = listingMetadata({ title: "Bags", description: "d", path: "/category/bags", sp: { sort: "price_asc" } });
@@ -87,19 +87,19 @@ describe("product structured data", () => {
     expect((ld.offers as Record<string, unknown>)["@type"]).toBe("AggregateOffer");
   });
   it("builds breadcrumbs with absolute URLs", () => {
-    vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://malakandtradesuae.com");
+    vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://malakandthreadsuae.com");
     const b = breadcrumbLd([{ name: "Home", path: "/" }, { name: "Shop", path: "/shop" }]);
-    expect(b.itemListElement[1]).toMatchObject({ position: 2, item: "https://malakandtradesuae.com/shop" });
+    expect(b.itemListElement[1]).toMatchObject({ position: 2, item: "https://malakandthreadsuae.com/shop" });
   });
 });
 
 describe("robots.txt", () => {
   it("blocks private areas and points to the sitemap", () => {
-    vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://malakandtradesuae.com");
+    vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://malakandthreadsuae.com");
     const r = robots();
     const rule = Array.isArray(r.rules) ? r.rules[0] : r.rules;
     expect(rule.disallow).toEqual(expect.arrayContaining(["/admin", "/api/", "/checkout", "/account"]));
-    expect(r.sitemap).toBe("https://malakandtradesuae.com/sitemap.xml");
+    expect(r.sitemap).toBe("https://malakandthreadsuae.com/sitemap.xml");
   });
   it("can block everything on staging", () => {
     vi.stubEnv("ROBOTS_DISALLOW_ALL", "true");

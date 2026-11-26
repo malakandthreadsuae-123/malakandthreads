@@ -24,10 +24,17 @@ The Unsplash License does **not** grant trademark or model/property releases. It
 
 URL format: `https://images.unsplash.com/<photo ID>`.
 
-## Hero video — Pexels
+## Homepage videos — Mixkit
 
-`public/videos/hero-fashion.mp4` — Pexels video #8478619 "Fashionable women looking at camera" (https://www.pexels.com/video/fashionable-women-looking-at-camera-8478619/), [Pexels License](https://www.pexels.com/license/) (free commercial use; no endorsement implied by people shown).
-**Action:** the file is the original 15.6 MB download — the content was not visually reviewed frame-by-frame and it was not compressed (no ffmpeg available during development). Before launch, preview it, and replace or compress it (target ≤ 4 MB, 1280–1920 px wide, H.264, muted, ~10–20 s loop) via Admin → Homepage → Banners → Hero → *Background video*. It only loads on screens ≥ 768 px after first paint.
+Both clips are from [Mixkit](https://mixkit.co/) under the [Mixkit Stock Video Free License](https://mixkit.co/license/#videoFree) (free for commercial use, no attribution required; no endorsement implied by people shown). 720p H.264 downloads, muted loops.
+
+| File | Source |
+|---|---|
+| `public/videos/hero-embroidered.mp4` (5.6 MB, 15 s) | Mixkit #50785 "A young woman in traditional Indian attire and jewelry strikes a pose" |
+| `public/videos/story-embroidered.mp4` (3.1 MB, 9 s) | Mixkit #50790 "A young woman in a traditional Indian costume moves gracefully" |
+| `public/images/hero-embroidered.webp`, `public/images/story-embroidered.webp` | First frames of the clips above (posters / LCP image) |
+
+Replace them any time via Admin → Banners → Hero (*Background video*) and Admin → Homepage → *The Embroidered Edit* (config `video` / `poster`). Keep clips ≤ 6 MB, 1280–1920 px wide, 8–20 s.
 
 ## Brand assets
 

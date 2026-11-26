@@ -193,6 +193,7 @@ const HOMEPAGE_SECTIONS: { key: string; title: string; subtitle?: string; sortOr
   { key: "categories", title: "Shop by Category", sortOrder: 1, config: { slugs: ["womens-dresses", "abayas-kaftans", "party-festive-wear", "maxi-dresses", "shawls", "scarves-hijabs", "bags", "handbags", "random-collections", "seasonal-collections"] } },
   { key: "trust_strip", title: "Why shop with us", sortOrder: 2 },
   { key: "product_tabs", title: "Shop the Latest", subtitle: "New arrivals, customer favourites and what's trending now", sortOrder: 3, config: { limit: 8 } },
+  { key: "video_story", title: "The Embroidered Edit", subtitle: "Hand-finished embroidery, soft drape and heirloom detail — pieces made to be noticed.", sortOrder: 4, config: { video: "/videos/story-embroidered.mp4", poster: "/images/story-embroidered.webp", href: "/category/womens-clothing", cta: "Discover the edit" } },
   { key: "promo_banners", title: "Promotions", sortOrder: 4 },
   { key: "dresses", title: "Women's Dresses", subtitle: "Maxi, festive and everyday dresses", sortOrder: 5, config: { category: "womens-dresses" } },
   { key: "shop_by_price", title: "Shop by Budget", sortOrder: 6 },
@@ -204,7 +205,8 @@ const HOMEPAGE_SECTIONS: { key: string; title: string; subtitle?: string; sortOr
   { key: "testimonials", title: "What Our Customers Say", sortOrder: 12 },
   { key: "gallery", title: "Style Inspiration", subtitle: "Follow us for daily styling ideas", sortOrder: 13, config: { images: ["/images/demo/dress-09.webp", "/images/demo/shawl-07.webp", "/images/demo/bag-02.webp", "/images/demo/dress-03.webp", "/images/demo/editorial-04.webp", "/images/demo/shawl-06.webp"] } },
   { key: "whatsapp", title: "Shop with WhatsApp", subtitle: "Personal styling help, sizing advice and order support — just message us.", sortOrder: 14 },
-  { key: "newsletter", title: "Join the List", subtitle: "Be first to hear about new arrivals and private offers.", sortOrder: 15 },
+  // The footer already carries a newsletter sign-up, so this band is off by default.
+  { key: "newsletter", title: "Join the List", subtitle: "Be first to hear about new arrivals and private offers.", sortOrder: 15, isEnabled: false },
   { key: "trust", title: "Why Shop With Us", sortOrder: 16 },
   // Individual carousels (replaced by product_tabs by default — enable in Admin → Homepage if preferred)
   { key: "new_arrivals", title: "New Arrivals", subtitle: "Fresh pieces, just landed", sortOrder: 20, isEnabled: false, config: { limit: 8 } },
@@ -359,13 +361,13 @@ async function main() {
       data: [
         {
           placement: "HERO",
-          eyebrow: "New Season · UAE",
-          title: "Elegance, Curated for the Emirates",
-          subtitle: "Discover refined dresses, premium shawls and statement bags — delivered across all seven emirates with Cash on Delivery.",
-          videoUrl: "/videos/hero-fashion.mp4",
-          imageUrl: "/images/demo/dress-09.webp",
-          mobileImageUrl: "/images/demo/dress-08.webp",
-          imageAlt: "Woman in an elegant navy abaya layered over a beige dress",
+          eyebrow: "The Embroidered Edit · UAE",
+          title: "Elegance, Woven for the Emirates",
+          subtitle: "Designer dresses, premium shawls and statement bags from the labels you love — delivered across all seven emirates with Cash on Delivery.",
+          videoUrl: "/videos/hero-embroidered.mp4",
+          imageUrl: "/images/hero-embroidered.webp",
+          mobileImageUrl: null,
+          imageAlt: "Model in an embroidered teal outfit with traditional gold jewellery",
           ctaLabel: "Shop Now",
           ctaHref: "/shop",
           cta2Label: "Explore Collections",

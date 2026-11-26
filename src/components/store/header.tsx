@@ -42,6 +42,8 @@ export function Header({ categories, brands }: { categories: MenuCategory[]; bra
   const { cart, setCartOpen, wishlist, customer, settings } = useStore();
   const pathname = usePathname();
   const [compact, setCompact] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [hovered, setHovered] = useState(false);
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -49,7 +51,10 @@ export function Header({ categories, brands }: { categories: MenuCategory[]; bra
   const nav = buildNav(categories);
 
   useEffect(() => {
-    const onScroll = () => setCompact(window.scrollY > 80);
+    const onScroll = () => {
+      setCompact(window.scrollY > 80);
+      setScrolled(window.scrollY > 12);
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -97,8 +102,11 @@ export function Header({ categories, brands }: { categories: MenuCategory[]; bra
   const count = cart?.itemCount ?? 0;
   const active = (href: string) => pathname === href || (href !== "/" && pathname.startsWith(href));
   const openItem = nav.find((n) => n.key === openMenu);
+  // On the homepage the header floats transparently over the hero video until
+  // the visitor scrolls, hovers it, or opens a menu.
+  const clear = pathname === "/" && !scrolled && !hovered && !openMenu && !mobileOpen;
 
-  const iconBtn = "group relative flex flex-col items-center gap-1 px-2.5 py-1 text-charcoal/80 hover:text-charcoal";
+  const iconBtn = cn("group relative flex flex-col items-center gap-1 px-2.5 py-1 transition-colors", clear ? "text-ivory/90 hover:text-ivory" : "text-charcoal/80 hover:text-charcoal");
   const iconLabel = "hidden text-[10px] font-medium uppercase tracking-[0.12em] xl:block";
 
   return (
@@ -128,7 +136,18 @@ export function Header({ categories, brands }: { categories: MenuCategory[]; bra
         </div>
       </div>
 
-      <header className={cn("sticky top-0 z-50 bg-white/95 backdrop-blur-md transition-shadow duration-300", compact ? "shadow-[0_6px_24px_-12px_rgba(0,0,0,0.18)]" : "border-b border-line")} onMouseLeave={leave}>
+      <header
+        className={cn(
+          "sticky top-0 z-50 border-b transition-[background-color,border-color,box-shadow,color] duration-500",
+          clear ? "border-white/15 bg-transparent text-ivory" : "border-line bg-white/95 text-charcoal backdrop-blur-md",
+          compact && !clear && "border-transparent shadow-[0_6px_24px_-12px_rgba(0,0,0,0.18)]",
+        )}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => {
+          setHovered(false);
+          leave();
+        }}
+      >
         {/* Main bar */}
         <div className="container-luxe">
           <div className={cn("flex items-center gap-4 transition-all duration-300 lg:gap-8", compact ? "h-16" : "h-[72px] lg:h-20")}>
@@ -138,9 +157,9 @@ export function Header({ categories, brands }: { categories: MenuCategory[]; bra
               </button>
             </div>
             <Link href="/" className="flex-1 lg:flex-none" title="MALAKAND THREADS — home">
-              <Logo className="mx-auto lg:mx-0" />
+              <Logo light={clear} className="mx-auto transition-colors lg:mx-0" />
             </Link>
-            <SearchBox className="hidden flex-1 lg:block lg:max-w-xl xl:max-w-2xl" />
+            <SearchBox tone={clear ? "light" : "default"} className="hidden flex-1 lg:block lg:max-w-xl xl:max-w-2xl" />
             <div className="flex items-center justify-end lg:ml-auto">
               <button type="button" onClick={() => setSearchOpen(true)} className="p-2 lg:hidden" aria-label="Search products">
                 <Search className="h-[22px] w-[22px]" />
@@ -174,7 +193,7 @@ export function Header({ categories, brands }: { categories: MenuCategory[]; bra
         </div>
 
         {/* Category navigation (desktop) */}
-        <nav aria-label="Main" className="hidden border-t border-line lg:block">
+        <nav aria-label="Main" className={cn("hidden border-t transition-colors duration-500 lg:block", clear ? "border-white/15" : "border-line")}>
           <ul className="container-luxe flex h-12 items-center justify-center gap-1 xl:gap-3">
             {nav.map((item) => {
               const hasPanel = item.kind !== "link";
@@ -186,9 +205,15 @@ export function Header({ categories, brands }: { categories: MenuCategory[]; bra
                     aria-expanded={hasPanel ? openMenu === item.key : undefined}
                     aria-haspopup={hasPanel ? "true" : undefined}
                     className={cn(
-                      "relative flex h-full items-center gap-1 px-3 text-[13px] font-medium uppercase tracking-[0.14em] transition-colors",
-                      item.kind === "link" && item.accent ? "text-danger hover:text-danger/80" : "text-charcoal/80 hover:text-charcoal",
-                      (active(item.href) || openMenu === item.key) && "text-charcoal",
+                      "relative flex h-full items-center gap-1 px-3 text-[12.5px] font-medium uppercase tracking-[0.18em] transition-colors",
+                      item.kind === "link" && item.accent
+                        ? clear
+                          ? "text-gold hover:text-ivory"
+                          : "text-danger hover:text-danger/80"
+                        : clear
+                          ? "text-ivory/85 hover:text-ivory"
+                          : "text-charcoal/75 hover:text-charcoal",
+                      !clear && (active(item.href) || openMenu === item.key) && "text-charcoal",
                     )}
                   >
                     {item.label}
