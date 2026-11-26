@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "(prisma migrate resolve --rolled-back 20261126144417_product_effective_price || true; prisma migrate deploy && (if [ x$RUN_SEED = xtrue ]; then prisma db seed; fi) || echo db-setup-skipped) && prisma generate && next build --webpack",
+    "build": "(prisma migrate deploy && (if [ x$RUN_SEED = xtrue ]; then prisma db seed; fi) && (if [ x$RESET_ADMIN = xtrue ]; then npm run admin:create; fi) || echo db-setup-skipped) && prisma generate && next build --webpack",
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
