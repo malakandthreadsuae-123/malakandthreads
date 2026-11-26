@@ -1,0 +1,146 @@
+@import "tailwindcss";
+
+/* ─────────────────────────────────────────────
+   MALAKAND THREADS — design tokens
+   ───────────────────────────────────────────── */
+@theme {
+  --color-charcoal: #171717;
+  --color-charcoal-soft: #2a2a2a;
+  --color-ivory: #f8f5f0;
+  --color-gold: #c5a46d;
+  --color-gold-dark: #765b2e; /* AA-contrast gold for text on ivory/white (≥ 5:1) */
+  --color-beige: #e9e1d6;
+  --color-sand: #f2ede5;
+  --color-muted: #6b6b6b;
+  --color-line: #e5ddd1;
+  --color-success: #2f6b4f;
+  --color-danger: #a3271f;
+  --color-warning: #8a5a00;
+
+  --font-serif: var(--font-playfair), Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+
+  --shadow-soft: 0 10px 30px -12px rgb(23 23 23 / 0.18);
+  --shadow-card: 0 1px 2px rgb(23 23 23 / 0.04), 0 8px 24px -12px rgb(23 23 23 / 0.12);
+
+  --ease-luxe: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --animate-shimmer: shimmer 1.6s infinite linear;
+  @keyframes shimmer {
+    0% { background-position: -400px 0; }
+    100% { background-position: 400px 0; }
+  }
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-ivory text-charcoal font-sans antialiased;
+    overflow-x: hidden;
+  }
+  h1, h2, h3, .font-display {
+    @apply font-serif;
+    letter-spacing: -0.01em;
+  }
+  ::selection {
+    background: var(--color-gold);
+    color: var(--color-charcoal);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-gold-dark);
+    outline-offset: 2px;
+  }
+  input, select, textarea, button { font: inherit; }
+  [hidden] { display: none !important; }
+}
+
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 text-[12px] font-semibold uppercase tracking-[0.18em] transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-50;
+  transition-timing-function: var(--ease-luxe);
+}
+
+@layer components {
+  .container-luxe {
+    @apply mx-auto w-full max-w-[1400px] px-4 sm:px-6 lg:px-10;
+  }
+  .eyebrow {
+    @apply text-[11px] font-medium uppercase tracking-[0.28em] text-gold-dark;
+  }
+  .btn-primary {
+    @apply btn bg-charcoal text-ivory hover:bg-gold hover:text-charcoal;
+  }
+  .btn-gold {
+    @apply btn bg-gold text-charcoal hover:bg-ivory;
+  }
+  .btn-outline {
+    @apply btn border border-charcoal text-charcoal hover:bg-charcoal hover:text-ivory;
+  }
+  .btn-outline-light {
+    @apply btn border border-ivory/80 text-ivory hover:bg-ivory hover:text-charcoal;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center gap-2 text-[12px] font-medium uppercase tracking-[0.2em] text-charcoal underline-offset-8 hover:underline;
+  }
+  .input {
+    @apply w-full rounded-lg border border-line bg-white px-4 py-3 text-[15px] text-charcoal placeholder:text-muted/70 transition-colors focus:border-charcoal focus:outline-none focus:ring-0 aria-[invalid=true]:border-danger;
+  }
+  .label {
+    @apply mb-1.5 block text-[12px] font-medium uppercase tracking-[0.14em] text-charcoal/80;
+  }
+  .field-error {
+    @apply mt-1 text-[13px] text-danger;
+  }
+  .card {
+    @apply rounded-xl border border-line bg-white;
+  }
+  .badge {
+    @apply inline-flex items-center px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em];
+  }
+  .skeleton {
+    @apply rounded-sm bg-beige/70;
+    background-image: linear-gradient(90deg, transparent 0, rgb(255 255 255 / 0.55) 50%, transparent 100%);
+    background-size: 400px 100%;
+    background-repeat: no-repeat;
+    animation: var(--animate-shimmer);
+  }
+  .link-underline {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 0.4s var(--ease-luxe);
+  }
+  .link-underline:hover { background-size: 100% 1px; }
+
+  /* Rich text rendered from admin Markdown */
+  .prose-luxe { @apply text-[16px] leading-[1.8] text-charcoal/85; }
+  .prose-luxe h2 { @apply mt-10 mb-4 font-serif text-2xl text-charcoal; }
+  .prose-luxe h3 { @apply mt-8 mb-3 font-serif text-xl text-charcoal; }
+  .prose-luxe h4 { @apply mt-6 mb-2 font-semibold text-charcoal; }
+  .prose-luxe p { @apply my-4; }
+  .prose-luxe ul { @apply my-4 list-disc space-y-2 pl-6; }
+  .prose-luxe ol { @apply my-4 list-decimal space-y-2 pl-6; }
+  .prose-luxe a { @apply text-gold-dark underline underline-offset-4 hover:text-charcoal; }
+  .prose-luxe strong { @apply font-semibold text-charcoal; }
+  .prose-luxe blockquote { @apply my-6 border-l-2 border-gold pl-5 font-serif text-lg italic; }
+  .prose-luxe img { @apply my-6 w-full rounded-sm; }
+  .prose-luxe hr { @apply my-10 border-line; }
+  .prose-luxe code { @apply rounded bg-sand px-1.5 py-0.5 text-[14px]; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

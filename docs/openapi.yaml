@@ -1,0 +1,312 @@
+openapi: 3.1.0
+info:
+  title: MALAKAND THREADS API
+  version: 1.0.0
+  description: |
+    REST API of the MALAKAND THREADS store (Next.js route handlers).
+    Responses use `{ ok: true, data }` or `{ ok: false, error: { code, message, fields? } }`.
+    Money values are integer **fils** (AED × 100). Cookie authentication:
+    `mt_session` (customers) and `mt_admin` (staff). Same-origin requests only (CSRF protection).
+servers:
+  - url: https://malakandtradesuae.com
+  - url: http://localhost:3000
+tags:
+  - name: Catalogue
+  - name: Cart & Checkout
+  - name: Orders
+  - name: Payments
+  - name: Account
+  - name: Admin
+components:
+  securitySchemes:
+    customerSession: { type: apiKey, in: cookie, name: mt_session }
+    adminSession: { type: apiKey, in: cookie, name: mt_admin }
+  schemas:
+    Error:
+      type: object
+      properties:
+        ok: { const: false }
+        error:
+          type: object
+          required: [code, message]
+          properties:
+            code: { type: string, examples: [VALIDATION_ERROR, UNAUTHENTICATED, FORBIDDEN, INSUFFICIENT_STOCK] }
+            message: { type: string }
+            fields: { type: object, additionalProperties: { type: string } }
+    Emirate:
+      type: string
+      enum: [ABU_DHABI, DUBAI, SHARJAH, AJMAN, UMM_AL_QUWAIN, RAS_AL_KHAIMAH, FUJAIRAH]
+    ProductCard:
+      type: object
+      properties:
+        id: { type: string }
+        name: { type: string }
+        slug: { type: string }
+        price: { type: integer, description: Effective price in fils }
+        regularPrice: { type: integer }
+        brand: { type: [string, "null"] }
+        image: { type: [object, "null"], properties: { url: { type: string }, alt: { type: [string, "null"] } } }
+        inStock: { type: boolean }
+        onSale: { type: boolean }
+        isDemo: { type: boolean }
+    Totals:
+      type: object
+      properties:
+        subtotal: { type: integer }
+        discount: { type: integer }
+        shippingFee: { type: integer }
+        codFee: { type: integer }
+        vatAmount: { type: integer }
+        total: { type: integer }
+        freeShipping: { type: boolean }
+    Cart:
+      type: object
+      properties:
+        lines: { type: array, items: { type: object } }
+        itemCount: { type: integer }
+        totals: { $ref: "#/components/schemas/Totals" }
+        coupon: { type: [object, "null"] }
+        hasProblems: { type: boolean }
+    CheckoutInput:
+      type: object
+      required: [email, fullName, phone, emirate, city, area, street, building, paymentMethod, acceptTerms]
+      properties:
+        email: { type: string, format: email }
+        fullName: { type: string }
+        phone: { type: string, description: UAE number, normalised to +971… }
+        emirate: { $ref: "#/components/schemas/Emirate" }
+        city: { type: string }
+        area: { type: string }
+        street: { type: string }
+        building: { type: string }
+        apartment: { type: [string, "null"] }
+        landmark: { type: [string, "null"] }
+        deliveryInstructions: { type: [string, "null"] }
+        paymentMethod: { type: string, enum: [COD, STRIPE] }
+        couponCode: { type: [string, "null"] }
+        saveAddress: { type: boolean }
+        acceptTerms: { const: true }
+    ProductInput:
+      type: object
+      required: [name, sku, regularPrice, variants]
+      properties:
+        name: { type: string }
+        slug: { type: string }
+        sku: { type: string }
+        regularPrice: { type: number, description: AED (converted to fils) }
+        salePrice: { type: [number, "null"] }
+        costPrice: { type: [number, "null"] }
+        status: { type: string, enum: [DRAFT, ACTIVE, INACTIVE] }
+        brandId: { type: [string, "null"] }
+        categoryId: { type: [string, "null"] }
+        categoryIds: { type: array, items: { type: string } }
+        images: { type: array, items: { type: object, properties: { url: { type: string }, alt: { type: string } } } }
+        variants:
+          type: array
+          minItems: 1
+          items:
+            type: object
+            required: [sku, stock]
+            properties:
+              id: { type: string }
+              sku: { type: string }
+              size: { type: [string, "null"] }
+              color: { type: [string, "null"] }
+              colorHex: { type: [string, "null"] }
+              priceOverride: { type: [number, "null"] }
+              stock: { type: integer }
+              lowStockThreshold: { type: integer }
+              isActive: { type: boolean }
+  responses:
+    Error: { description: Error, content: { application/json: { schema: { $ref: "#/components/schemas/Error" } } } }
+paths:
+  /api/products:
+    get:
+      tags: [Catalogue]
+      summary: List products with filters, sorting and pagination
+      parameters:
+        - { name: q, in: query, schema: { type: string } }
+        - { name: category, in: query, schema: { type: string }, description: category slug (includes subcategories) }
+        - { name: brand, in: query, schema: { type: string }, description: comma-separated brand slugs }
+        - { name: size, in: query, schema: { type: string } }
+        - { name: color, in: query, schema: { type: string } }
+        - { name: minPrice, in: query, schema: { type: number }, description: AED }
+        - { name: maxPrice, in: query, schema: { type: number }, description: AED }
+        - { name: inStock, in: query, schema: { const: "1" } }
+        - { name: sale, in: query, schema: { const: "1" } }
+        - { name: flag, in: query, schema: { enum: [new, best, featured, trending, sale] } }
+        - { name: sort, in: query, schema: { enum: [newest, price_asc, price_desc, best_selling, popular, featured] } }
+        - { name: page, in: query, schema: { type: integer, minimum: 1 } }
+        - { name: pageSize, in: query, schema: { type: integer, maximum: 48 } }
+        - { name: ids, in: query, schema: { type: string }, description: comma-separated ids (returns cards only) }
+      responses:
+        "200": { description: OK, content: { application/json: { schema: { type: object, properties: { ok: { const: true }, data: { type: object, properties: { items: { type: array, items: { $ref: "#/components/schemas/ProductCard" } }, total: { type: integer }, page: { type: integer }, totalPages: { type: integer } } } } } } } }
+        "422": { $ref: "#/components/responses/Error" }
+  /api/products/{slug}:
+    get:
+      tags: [Catalogue]
+      summary: Product detail
+      parameters: [{ name: slug, in: path, required: true, schema: { type: string } }]
+      responses: { "200": { description: OK }, "404": { $ref: "#/components/responses/Error" } }
+  /api/categories: { get: { tags: [Catalogue], summary: Category tree, responses: { "200": { description: OK } } } }
+  /api/brands: { get: { tags: [Catalogue], summary: Active brands, responses: { "200": { description: OK } } } }
+  /api/search/suggest:
+    get:
+      tags: [Catalogue]
+      summary: Live search suggestions
+      parameters: [{ name: q, in: query, required: true, schema: { type: string, minLength: 2 } }]
+      responses: { "200": { description: OK } }
+  /api/cart:
+    get:
+      tags: [Cart & Checkout]
+      summary: Current cart with server-computed totals
+      parameters:
+        - { name: emirate, in: query, schema: { $ref: "#/components/schemas/Emirate" } }
+        - { name: paymentMethod, in: query, schema: { enum: [COD, STRIPE] } }
+      responses: { "200": { description: OK, content: { application/json: { schema: { type: object, properties: { data: { $ref: "#/components/schemas/Cart" } } } } } } }
+    delete: { tags: [Cart & Checkout], summary: Empty cart, responses: { "200": { description: OK } } }
+  /api/cart/items:
+    post:
+      tags: [Cart & Checkout]
+      summary: Add a variant
+      requestBody: { required: true, content: { application/json: { schema: { type: object, required: [variantId, quantity], properties: { variantId: { type: string }, quantity: { type: integer, minimum: 1, maximum: 20 } } } } } }
+      responses: { "200": { description: Updated cart }, "409": { $ref: "#/components/responses/Error" } }
+  /api/cart/items/{variantId}:
+    patch:
+      tags: [Cart & Checkout]
+      summary: Change quantity (0 removes)
+      parameters: [{ name: variantId, in: path, required: true, schema: { type: string } }]
+      requestBody: { content: { application/json: { schema: { type: object, properties: { quantity: { type: integer, minimum: 0 } } } } } }
+      responses: { "200": { description: Updated cart } }
+    delete:
+      tags: [Cart & Checkout]
+      parameters: [{ name: variantId, in: path, required: true, schema: { type: string } }]
+      responses: { "200": { description: Updated cart } }
+  /api/cart/coupon:
+    post:
+      tags: [Cart & Checkout]
+      requestBody: { content: { application/json: { schema: { type: object, properties: { code: { type: string } } } } } }
+      responses: { "200": { description: Updated cart }, "422": { $ref: "#/components/responses/Error" } }
+    delete: { tags: [Cart & Checkout], responses: { "200": { description: Updated cart } } }
+  /api/checkout:
+    post:
+      tags: [Cart & Checkout]
+      summary: Place an order from the cart (transactional; server-side pricing & stock)
+      requestBody: { required: true, content: { application/json: { schema: { $ref: "#/components/schemas/CheckoutInput" } } } }
+      responses:
+        "201": { description: Created, content: { application/json: { schema: { type: object, properties: { data: { type: object, properties: { orderNumber: { type: string }, accessToken: { type: string }, redirectUrl: { type: string } } } } } } } }
+        "409": { $ref: "#/components/responses/Error" }
+        "422": { $ref: "#/components/responses/Error" }
+  /api/orders:
+    get: { tags: [Orders], security: [{ customerSession: [] }], summary: My orders, responses: { "200": { description: OK }, "401": { $ref: "#/components/responses/Error" } } }
+  /api/orders/{orderNumber}:
+    get:
+      tags: [Orders]
+      summary: Order detail (owner or access token)
+      parameters:
+        - { name: orderNumber, in: path, required: true, schema: { type: string } }
+        - { name: t, in: query, schema: { type: string } }
+      responses: { "200": { description: OK }, "404": { $ref: "#/components/responses/Error" } }
+  /api/orders/{orderNumber}/invoice:
+    get:
+      tags: [Orders]
+      summary: PDF invoice
+      parameters:
+        - { name: orderNumber, in: path, required: true, schema: { type: string } }
+        - { name: t, in: query, schema: { type: string } }
+      responses: { "200": { description: PDF, content: { application/pdf: {} } } }
+  /api/orders/track:
+    post:
+      tags: [Orders]
+      requestBody: { content: { application/json: { schema: { type: object, required: [orderNumber, email], properties: { orderNumber: { type: string }, email: { type: string } } } } } }
+      responses: { "200": { description: Tracking URL }, "404": { $ref: "#/components/responses/Error" } }
+  /api/payments/stripe/session:
+    post: { tags: [Payments], summary: Retry card payment for a pending order, responses: { "200": { description: Redirect URL } } }
+  /api/payments/webhooks/stripe:
+    post:
+      tags: [Payments]
+      summary: Stripe webhook (Stripe-Signature verified, idempotent)
+      parameters: [{ name: Stripe-Signature, in: header, required: true, schema: { type: string } }]
+      responses: { "200": { description: Received }, "400": { description: Invalid signature } }
+  /api/auth/register:
+    post:
+      tags: [Account]
+      requestBody: { content: { application/json: { schema: { type: object, required: [name, email, password], properties: { name: { type: string }, email: { type: string }, phone: { type: string }, password: { type: string, minLength: 10 }, marketingOptIn: { type: boolean } } } } } }
+      responses: { "201": { description: Created (session cookie set) }, "409": { $ref: "#/components/responses/Error" } }
+  /api/auth/login:
+    post:
+      tags: [Account]
+      requestBody: { content: { application/json: { schema: { type: object, properties: { email: { type: string }, password: { type: string } } } } } }
+      responses: { "200": { description: Signed in }, "401": { $ref: "#/components/responses/Error" }, "429": { $ref: "#/components/responses/Error" } }
+  /api/auth/logout: { post: { tags: [Account], responses: { "200": { description: Signed out } } } }
+  /api/auth/forgot-password: { post: { tags: [Account], responses: { "200": { description: Always the same response } } } }
+  /api/auth/reset-password: { post: { tags: [Account], responses: { "200": { description: Password reset }, "400": { $ref: "#/components/responses/Error" } } } }
+  /api/auth/verify-email: { post: { tags: [Account], responses: { "200": { description: Verified } } } }
+  /api/auth/resend-verification: { post: { tags: [Account], security: [{ customerSession: [] }], responses: { "200": { description: Sent } } } }
+  /api/auth/me: { get: { tags: [Account], responses: { "200": { description: Current customer or null } } } }
+  /api/customers/me:
+    get: { tags: [Account], security: [{ customerSession: [] }], responses: { "200": { description: Profile } } }
+    patch: { tags: [Account], security: [{ customerSession: [] }], responses: { "200": { description: Updated } } }
+  /api/customers/me/password: { post: { tags: [Account], security: [{ customerSession: [] }], responses: { "200": { description: Changed } } } }
+  /api/customers/me/export: { get: { tags: [Account], security: [{ customerSession: [] }], responses: { "200": { description: JSON download } } } }
+  /api/customers/me/delete-request: { post: { tags: [Account], security: [{ customerSession: [] }], responses: { "200": { description: Requested } } } }
+  /api/customers/addresses:
+    get: { tags: [Account], security: [{ customerSession: [] }], responses: { "200": { description: Addresses } } }
+    post: { tags: [Account], security: [{ customerSession: [] }], responses: { "201": { description: Created } } }
+  /api/customers/addresses/{id}:
+    patch: { tags: [Account], security: [{ customerSession: [] }], parameters: [{ name: id, in: path, required: true, schema: { type: string } }], responses: { "200": { description: Updated }, "404": { $ref: "#/components/responses/Error" } } }
+    delete: { tags: [Account], security: [{ customerSession: [] }], parameters: [{ name: id, in: path, required: true, schema: { type: string } }], responses: { "200": { description: Deleted } } }
+  /api/wishlist:
+    get: { tags: [Account], security: [{ customerSession: [] }], responses: { "200": { description: Wishlist } } }
+    post: { tags: [Account], security: [{ customerSession: [] }], responses: { "200": { description: Added } } }
+    delete: { tags: [Account], security: [{ customerSession: [] }], responses: { "200": { description: Removed } } }
+  /api/wishlist/merge: { post: { tags: [Account], security: [{ customerSession: [] }], responses: { "200": { description: Merged } } } }
+  /api/reviews: { post: { tags: [Account], security: [{ customerSession: [] }], responses: { "200": { description: Submitted for moderation } } } }
+  /api/newsletter:
+    post: { tags: [Account], responses: { "200": { description: Subscribed } } }
+    delete: { tags: [Account], parameters: [{ name: token, in: query, schema: { type: string } }], responses: { "200": { description: Unsubscribed } } }
+  /api/contact: { post: { tags: [Account], responses: { "200": { description: Received } } } }
+  /api/admin/auth/login: { post: { tags: [Admin], responses: { "200": { description: Signed in (mt_admin cookie) } } } }
+  /api/admin/dashboard:
+    get:
+      tags: [Admin]
+      security: [{ adminSession: [] }]
+      parameters:
+        - { name: range, in: query, schema: { enum: [today, 7d, 30d, month, year, custom] } }
+        - { name: from, in: query, schema: { type: string, format: date } }
+        - { name: to, in: query, schema: { type: string, format: date } }
+      responses: { "200": { description: KPIs, series, best sellers }, "403": { $ref: "#/components/responses/Error" } }
+  /api/admin/products:
+    get: { tags: [Admin], security: [{ adminSession: [] }], responses: { "200": { description: Paginated products } } }
+    post:
+      tags: [Admin]
+      security: [{ adminSession: [] }]
+      requestBody: { content: { application/json: { schema: { $ref: "#/components/schemas/ProductInput" } } } }
+      responses: { "201": { description: Created }, "403": { $ref: "#/components/responses/Error" }, "422": { $ref: "#/components/responses/Error" } }
+  /api/admin/products/{id}:
+    get: { tags: [Admin], security: [{ adminSession: [] }], parameters: [{ name: id, in: path, required: true, schema: { type: string } }], responses: { "200": { description: Product } } }
+    patch: { tags: [Admin], security: [{ adminSession: [] }], parameters: [{ name: id, in: path, required: true, schema: { type: string } }], responses: { "200": { description: Updated } } }
+    delete: { tags: [Admin], security: [{ adminSession: [] }], parameters: [{ name: id, in: path, required: true, schema: { type: string } }], responses: { "200": { description: Deleted (URL returns 410) } } }
+  /api/admin/products/bulk: { post: { tags: [Admin], security: [{ adminSession: [] }], responses: { "200": { description: Bulk action applied } } } }
+  /api/admin/products/export: { get: { tags: [Admin], security: [{ adminSession: [] }], responses: { "200": { description: CSV } } } }
+  /api/admin/products/import: { post: { tags: [Admin], security: [{ adminSession: [] }], responses: { "200": { description: Import summary } } } }
+  /api/admin/orders: { get: { tags: [Admin], security: [{ adminSession: [] }], responses: { "200": { description: Orders } } } }
+  /api/admin/orders/{id}:
+    patch:
+      tags: [Admin]
+      security: [{ adminSession: [] }]
+      parameters: [{ name: id, in: path, required: true, schema: { type: string } }]
+      requestBody: { content: { application/json: { schema: { type: object, required: [status], properties: { status: { type: string }, note: { type: string }, notifyCustomer: { type: boolean }, restock: { type: boolean }, refundOnline: { type: boolean }, shipment: { type: object } } } } } }
+      responses: { "200": { description: Updated }, "409": { $ref: "#/components/responses/Error" } }
+  /api/admin/reports:
+    get:
+      tags: [Admin]
+      security: [{ adminSession: [] }]
+      parameters:
+        - { name: type, in: query, required: true, schema: { enum: [sales, products, brands, categories, customers, orders, inventory] } }
+        - { name: format, in: query, schema: { const: csv } }
+      responses: { "200": { description: Report or CSV } }
+  /api/admin/settings:
+    get: { tags: [Admin], security: [{ adminSession: [] }], responses: { "200": { description: Settings & integration status } } }
+    patch: { tags: [Admin], security: [{ adminSession: [] }], responses: { "200": { description: Saved } } }
+  /api/admin/uploads: { post: { tags: [Admin], security: [{ adminSession: [] }], responses: { "201": { description: "{ url, width, height }" } } } }

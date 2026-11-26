@@ -1,0 +1,42 @@
+# dependencies
+/node_modules
+
+# next.js / build
+/.next/
+/out/
+/build
+*.tsbuildinfo
+next-env.d.ts
+
+# generated prisma client
+/src/generated/
+
+# secrets - NEVER commit
+.env
+.env.*
+!.env.example
+
+# uploads & runtime data (contain customer/admin uploaded files)
+/storage/uploads/*
+!/storage/uploads/.gitkeep
+/storage/backups/
+*.sql
+*.sql.gz
+# …but Prisma migrations MUST be committed (they are applied on deploy)
+!prisma/migrations/**/*.sql
+
+# testing
+/coverage
+/playwright-report/
+/test-results/
+/blob-report/
+/playwright/.cache/
+
+# logs & OS
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea/
