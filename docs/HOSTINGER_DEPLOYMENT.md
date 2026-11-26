@@ -61,7 +61,7 @@ If the install step reports blocked install scripts (npm 11), the approvals for 
 | `NEXT_PUBLIC_SITE_URL` | `https://malakandtradesuae.com` |
 | `DATABASE_URL` | from step 2 |
 | `AUTH_SECRET` | 64+ random characters (`node -e "console.log(require('crypto').randomBytes(48).toString('base64url'))"`) |
-| `ADMIN_INITIAL_EMAIL` | `malakantradesuae@gmail.com` |
+| `ADMIN_INITIAL_EMAIL` | `malakandthreadsuae@gmail.com` |
 | `ADMIN_INITIAL_PASSWORD` | strong temporary password (remove after first login) |
 | `SMTP_*`, `EMAIL_FROM`, `ADMIN_NOTIFICATION_EMAIL` | see [EMAIL_SETUP.md](EMAIL_SETUP.md) |
 | `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` | see [PAYMENT_GATEWAY_SETUP.md](PAYMENT_GATEWAY_SETUP.md) (leave empty to offer COD only) |

@@ -217,7 +217,7 @@ async function main() {
   await seedRoles(prisma);
 
   // ── Super admin (password from env, never hardcoded) ──
-  const adminEmail = (process.env.ADMIN_INITIAL_EMAIL || "malakantradesuae@gmail.com").toLowerCase();
+  const adminEmail = (process.env.ADMIN_INITIAL_EMAIL || "malakandthreadsuae@gmail.com").toLowerCase();
   const adminPassword = process.env.ADMIN_INITIAL_PASSWORD;
   const superRole = await prisma.role.findUniqueOrThrow({ where: { key: "super_admin" } });
   const existingAdmin = await prisma.user.findUnique({ where: { email: adminEmail } });

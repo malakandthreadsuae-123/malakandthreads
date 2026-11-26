@@ -4,7 +4,7 @@ Dashboard: **https://malakandtradesuae.com/admin** (locally `http://localhost:30
 
 ## First sign-in
 
-1. Email: `malakantradesuae@gmail.com`. Password: the value of `ADMIN_INITIAL_PASSWORD` in the server's environment (never stored in code).
+1. Email: `malakandthreadsuae@gmail.com`. Password: the value of `ADMIN_INITIAL_PASSWORD` in the server's environment (never stored in code).
 2. You are immediately asked to set a new password (min 12 characters, upper/lower case and a number). Use a password manager.
 3. After changing it, the initial password no longer works. You may remove `ADMIN_INITIAL_PASSWORD` from the server environment.
 4. Lost access? On the server run `npm run admin:create` (resets the Super Admin to `ADMIN_INITIAL_PASSWORD` with a forced change), or use **Forgot password** on the login page once email is configured.
