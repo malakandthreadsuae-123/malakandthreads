@@ -1,5 +1,5 @@
 export const BRAND_NAME = "MALAKAND THREADS";
-export const PRODUCTION_URL = "https://malakandtradesuae.com";
+export const PRODUCTION_URL = "https://malakandthreadsuae.com";
 export const CONTACT_EMAIL = "malakantradesuae@gmail.com";
 export const CONTACT_PHONE = "+971559912484";
 export const WHATSAPP_NUMBER = "971559912484";
