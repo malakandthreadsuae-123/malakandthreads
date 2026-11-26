@@ -8,8 +8,8 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "(prisma migrate deploy || echo migrate-skipped) && prisma generate && next build --webpack",
-    "start": "prisma migrate deploy && if [ x$RUN_SEED = xtrue ]; then prisma db seed; fi && next start",
+    "build": "(prisma migrate deploy && (if [ x$RUN_SEED = xtrue ]; then prisma db seed; fi) || echo db-setup-skipped) && prisma generate && next build --webpack",
+    "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
