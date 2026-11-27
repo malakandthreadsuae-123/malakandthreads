@@ -25,7 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
       ...(googleVerification ? { google: googleVerification } : {}),
       ...(Object.keys(other).length ? { other } : {}),
     },
-    icons: { icon: [{ url: "/icon.svg", type: "image/svg+xml" }, { url: "/brand/favicon-48.png", sizes: "48x48" }], apple: "/apple-icon.png" },
+    icons: { icon: [{ url: "/icon.png", type: "image/png", sizes: "512x512" }, { url: "/brand/favicon-48.png", sizes: "48x48" }], apple: "/apple-icon.png" },
     openGraph: { siteName: s.brandName, locale: "en_AE", type: "website", images: [{ url: s.seo.ogImage, width: 1200, height: 630, alt: s.brandName }] },
     twitter: { card: "summary_large_image" },
   };

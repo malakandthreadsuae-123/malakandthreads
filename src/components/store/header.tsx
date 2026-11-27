@@ -168,7 +168,7 @@ export function Header({ categories, brands }: { categories: MenuCategory[]; bra
           </div>
 
           <Link href="/" className="shrink-0" title="MALAKAND THREADS — home">
-            <Logo light={clear} className="transition-colors" />
+            <Logo light={clear} priority />
           </Link>
 
           <nav aria-label="Main" className="hidden h-full min-w-0 flex-1 justify-center lg:flex">

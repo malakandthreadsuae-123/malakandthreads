@@ -12,8 +12,7 @@ function layout(title: string, bodyHtml: string, preheader = "") {
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#FFFFFF;padding:32px 12px"><tr><td align="center">
 <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border:1px solid #E5E5E5">
 <tr><td style="background:#0A0A0A;padding:28px;text-align:center">
-<div style="font-family:Georgia,'Times New Roman',serif;font-size:24px;letter-spacing:7px;color:#FFFFFF">MALAKAND</div>
-<div style="font-size:10px;letter-spacing:8px;color:#C6A15B;margin-top:4px">THREADS</div></td></tr>
+<img src="${absoluteUrl("/brand/logo-white.png")}" width="220" height="50" alt="MALAKAND THREADS" style="display:inline-block;width:220px;height:auto;border:0;color:#FFFFFF;font-family:Helvetica,Arial,sans-serif;font-size:20px;letter-spacing:4px"></td></tr>
 <tr><td style="padding:32px 28px;font-size:15px;line-height:1.6">${bodyHtml}</td></tr>
 <tr><td style="padding:20px 28px;background:#FFFFFF;font-size:12px;color:#6b6b6b;text-align:center;line-height:1.6">
 MALAKAND THREADS · Premium fashion in the UAE<br>

@@ -43,7 +43,7 @@ export type SiteSettings = {
 export const DEFAULT_SETTINGS: SiteSettings = {
   brandName: BRAND_NAME,
   tagline: "Premium Women's Fashion in the UAE",
-  logoUrl: "/brand/logo.svg",
+  logoUrl: "/brand/logo-black.png",
   siteDomain: PRODUCTION_URL,
   contactEmail: CONTACT_EMAIL,
   contactPhone: CONTACT_PHONE,

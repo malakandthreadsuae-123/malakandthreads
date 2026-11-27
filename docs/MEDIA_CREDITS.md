@@ -38,4 +38,4 @@ Replace them any time via Admin → Banners → Hero (*Background video*) and Ad
 
 ## Brand assets
 
-`public/brand/*`, `src/app/icon.svg`, `src/app/favicon.ico`, `src/app/apple-icon.png` — created for this project (typographic wordmark and "M" monogram). Regenerate with `node scripts/generate-brand-assets.mjs` and `node scripts/make-favicon.mjs`. Fonts: Playfair Display and Inter (SIL Open Font License, self-hosted via `next/font`).
+`public/brand/logo-original.png` — the official MALAKAND THREADS brush-script logo supplied by the store owner. Every other brand file (`logo-black.png`, `logo-white.png`, `mark-white.png`, icons, `src/app/icon.png`, `src/app/apple-icon.png`, `src/app/favicon.ico`, `og-image.jpg`, `logo-square.png`) is generated from it with `node scripts/generate-brand-assets.mjs`. Fonts: Cormorant Garamond and Jost (SIL Open Font License, self-hosted via `next/font`).

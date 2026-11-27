@@ -1,4 +1,6 @@
 import "server-only";
+import fs from "node:fs";
+import path from "node:path";
 import PDFDocument from "pdfkit";
 import { formatAED } from "./money";
 import { emirateLabel, PAYMENT_METHOD_LABELS, PAYMENT_STATUS_LABELS, ORDER_STATUS_LABELS, type OrderStatusValue } from "./constants";
@@ -52,8 +54,14 @@ export function renderInvoicePdf(o: InvoiceOrder, s: SiteSettings): Promise<Buff
 
     // Header band
     doc.rect(0, 0, doc.page.width, 110).fill(CHARCOAL);
-    doc.fillColor("#F8F5F0").font("Times-Roman").fontSize(24).text("MALAKAND", left, 34, { characterSpacing: 5 });
-    doc.fillColor(GOLD).font("Helvetica").fontSize(9).text("THREADS", left + 2, 64, { characterSpacing: 9 });
+    // Official logo (white version); falls back to text if the file is not deployed alongside the server.
+    const logoPath = path.join(process.cwd(), "public/brand/logo-white.png");
+    if (fs.existsSync(logoPath)) {
+      doc.image(logoPath, left, 30, { width: 190 });
+    } else {
+      doc.fillColor("#FFFFFF").font("Helvetica-Bold").fontSize(24).text("MALAKAND", left, 34, { characterSpacing: 5 });
+      doc.fillColor(GOLD).font("Helvetica").fontSize(9).text("THREADS", left + 2, 64, { characterSpacing: 9 });
+    }
     doc.fillColor("#F8F5F0").font("Helvetica-Bold").fontSize(16).text(s.trn ? "TAX INVOICE" : "INVOICE", left, 38, { width, align: "right" });
     doc.font("Helvetica").fontSize(9).fillColor("#d9d2c7").text(`${o.orderNumber}  ·  ${formatDate(o.createdAt)}`, left, 62, { width, align: "right" });
 
