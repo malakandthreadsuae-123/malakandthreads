@@ -6,7 +6,7 @@ import { ProductCard } from "./product-card";
 import type { ProductCard as Card } from "@/lib/services/catalog";
 
 /** Horizontally scrolling, snap-aligned product carousel (touch + keyboard + buttons). */
-export function ProductCarousel({ products, label }: { products: Card[]; label: string }) {
+export function ProductCarousel({ products, label, perView = 4 }: { products: Card[]; label: string; perView?: 3 | 4 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [canPrev, setCanPrev] = useState(false);
   const [canNext, setCanNext] = useState(true);
@@ -39,8 +39,8 @@ export function ProductCarousel({ products, label }: { products: Card[]; label: 
     <div className="relative" role="region" aria-roledescription="carousel" aria-label={label}>
       <div ref={ref} className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth px-4 pb-2 [scrollbar-width:none] sm:-mx-6 sm:gap-6 sm:px-6 lg:mx-0 lg:px-0 [&::-webkit-scrollbar]:hidden">
         {products.map((p, i) => (
-          <div key={p.id} className="w-[46%] shrink-0 snap-start sm:w-[31%] lg:w-[calc(25%-18px)]" aria-roledescription="slide" aria-label={`${i + 1} of ${products.length}`}>
-            <ProductCard product={p} sizes="(max-width: 640px) 46vw, (max-width: 1024px) 31vw, 25vw" />
+          <div key={p.id} className={`w-[46%] shrink-0 snap-start sm:w-[31%] ${perView === 3 ? "lg:w-[calc(33.333%-16px)]" : "lg:w-[calc(25%-18px)]"}`} aria-roledescription="slide" aria-label={`${i + 1} of ${products.length}`}>
+            <ProductCard product={p} sizes={perView === 3 ? "(max-width: 640px) 46vw, (max-width: 1024px) 31vw, 22vw" : "(max-width: 640px) 46vw, (max-width: 1024px) 31vw, 25vw"} />
           </div>
         ))}
       </div>

@@ -191,7 +191,7 @@ const PRODUCTS: DemoProduct[] = [
 const HOMEPAGE_SECTIONS: { key: string; title: string; subtitle?: string; sortOrder: number; isEnabled?: boolean; config?: object }[] = [
   { key: "hero", title: "Hero", sortOrder: 0 },
   { key: "categories", title: "Shop by Category", sortOrder: 2, config: { slugs: ["womens-dresses", "abayas-kaftans", "party-festive-wear", "maxi-dresses", "shawls", "scarves-hijabs", "bags", "handbags", "random-collections", "seasonal-collections"] } },
-  { key: "trust_strip", title: "Why shop with us", sortOrder: 1 },
+  { key: "trust_strip", title: "Why shop with us", sortOrder: 1, isEnabled: false },
   { key: "product_tabs", title: "Shop the Latest", subtitle: "New arrivals, customer favourites and what's trending now", sortOrder: 3, config: { limit: 8 } },
   { key: "video_story", title: "The Embroidered Edit", subtitle: "Hand-finished embroidery, soft drape and heirloom detail — pieces made to be noticed.", sortOrder: 5, config: { video: "/videos/story-embroidered.mp4", poster: "/images/story-embroidered.webp", href: "/category/womens-clothing", cta: "Discover the edit" } },
   { key: "promo_banners", title: "Promotions", sortOrder: 30, isEnabled: false },
