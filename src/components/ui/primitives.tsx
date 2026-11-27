@@ -4,14 +4,25 @@ import { formatAED, discountPercent } from "@/lib/money";
 import { jsonLdString, breadcrumbLd } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 
+/** The arch emblem: a Mughal-style doorway framing a single thread drop. */
+export function BrandMark({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 32 40" fill="none" aria-hidden className={className}>
+      <path d="M3 39V17C3 9.5 9 4 16 1.5 23 4 29 9.5 29 17v22" stroke="currentColor" strokeWidth="1.6" />
+      <path d="M8.5 39V18.5C8.5 13.5 12 10 16 8.2c4 1.8 7.5 5.3 7.5 10.3V39" stroke="currentColor" strokeWidth="1" opacity="0.65" />
+      <path d="M16 14v13" stroke="currentColor" strokeWidth="1" />
+      <path d="M16 27l2.6 2.6L16 32.2l-2.6-2.6z" fill="currentColor" />
+    </svg>
+  );
+}
+
 export function Logo({ light = false, className }: { light?: boolean; className?: string }) {
   return (
-    <span className={cn("inline-flex flex-col items-center leading-none select-none", className)}>
-      <span className={cn("font-serif text-[22px] tracking-[0.3em] sm:text-[26px]", light ? "text-ivory" : "text-charcoal")}>MALAKAND</span>
-      <span className={cn("mt-1 flex items-center gap-2 text-[8.5px] font-semibold tracking-[0.62em] sm:text-[9.5px]", light ? "text-gold" : "text-gold-dark")}>
-        <span aria-hidden className="h-px w-5 bg-gold/70" />
-        THREADS
-        <span aria-hidden className="h-px w-5 bg-gold/70" />
+    <span className={cn("inline-flex items-center gap-2.5 leading-none select-none sm:gap-3", className)}>
+      <BrandMark className={cn("h-9 w-auto sm:h-10", light ? "text-gold" : "text-gold-dark")} />
+      <span className="flex flex-col">
+        <span className={cn("font-serif text-[23px] font-semibold tracking-[0.2em] sm:text-[27px]", light ? "text-ivory" : "text-charcoal")}>MALAKAND</span>
+        <span className={cn("mt-1 text-[8.5px] font-medium tracking-[0.72em] sm:text-[9.5px]", light ? "text-gold" : "text-gold-dark")}>THREADS</span>
       </span>
     </span>
   );
@@ -53,7 +64,7 @@ export function Price({ price, regular, className, size = "md" }: { price: numbe
   const pct = onSale ? discountPercent(regular!, price) : 0;
   return (
     <span className={cn("inline-flex flex-wrap items-baseline gap-x-2", className)}>
-      <span className={cn("font-medium", size === "lg" ? "text-2xl" : size === "sm" ? "text-[13px]" : "text-[15px]", onSale && "text-danger")}>
+      <span className={cn("font-medium", size === "lg" ? "text-2xl" : size === "sm" ? "text-[13px]" : "text-[15px]", onSale && "text-charcoal")}>
         {formatAED(price)}
       </span>
       {onSale && (
@@ -62,7 +73,7 @@ export function Price({ price, regular, className, size = "md" }: { price: numbe
             <span className="sr-only">Was </span>
             {formatAED(regular!)}
           </span>
-          {size === "lg" && <span className="badge bg-danger/10 text-danger">Save {pct}%</span>}
+          {size === "lg" && <span className="badge bg-gold text-charcoal">Save {pct}%</span>}
         </>
       )}
     </span>
@@ -75,12 +86,12 @@ export function SectionHeading({ eyebrow, title, subtitle, action, align = "left
       <div className={cn(align === "center" && "max-w-2xl")}>
         {eyebrow && (
           <p className={cn("eyebrow mb-3 flex items-center gap-3", align === "center" && "justify-center")}>
-            <span aria-hidden className="h-px w-7 bg-gold" />
+            <span aria-hidden className="h-px w-8 bg-gold" />
             {eyebrow}
-            {align === "center" && <span aria-hidden className="h-px w-7 bg-gold" />}
+            {align === "center" && <span aria-hidden className="h-px w-8 bg-gold" />}
           </p>
         )}
-        <Tag className="text-3xl leading-tight tracking-[-0.01em] sm:text-[42px]">{title}</Tag>
+        <Tag className="text-[34px] leading-[1.1] sm:text-[46px]">{title}</Tag>
         {subtitle && <p className="mt-3 text-[15px] text-muted">{subtitle}</p>}
       </div>
       {action && (

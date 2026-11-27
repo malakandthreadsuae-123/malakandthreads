@@ -150,7 +150,7 @@ export default async function HomePage() {
           <div className="grid gap-8 md:grid-cols-3">
             {posts.map((p, i) => (
               <Reveal key={p.id} delay={i * 0.08}>
-                <Link href={`/blog/${p.slug}`} className="group block overflow-hidden rounded-2xl border border-line bg-white transition-shadow hover:shadow-card">
+                <Link href={`/blog/${p.slug}`} className="group block overflow-hidden rounded-sm border border-line bg-white transition-shadow hover:shadow-card">
                   <div className="relative aspect-[16/10] overflow-hidden bg-sand">
                     {p.coverImage && <Image src={p.coverImage} alt={p.coverAlt ?? p.title} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover transition-transform duration-1000 group-hover:scale-105" />}
                   </div>

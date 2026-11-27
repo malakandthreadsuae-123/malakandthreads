@@ -7,8 +7,8 @@ export default function manifest(): MetadataRoute.Manifest {
     description: "Premium women's fashion in the UAE — dresses, shawls and bags.",
     start_url: "/",
     display: "standalone",
-    background_color: "#F8F5F0",
-    theme_color: "#171717",
+    background_color: "#FFFFFF",
+    theme_color: "#0a0a0a",
     icons: [
       { src: "/brand/icon-192.png", sizes: "192x192", type: "image/png" },
       { src: "/brand/icon-512.png", sizes: "512x512", type: "image/png" },

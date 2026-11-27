@@ -7,8 +7,8 @@ import { Area, AreaChart, Bar, BarChart, CartesianGrid, ResponsiveContainer, Too
  * One hue (brand gold, AA-contrast step on white), 2px line, recessive grid,
  * crosshair tooltip on hover. Revenue and order count are separate charts (never dual-axis).
  */
-const INK = "#8a6d3b";
-const GRID = "#ece6dc";
+const INK = "#7d5f27";
+const GRID = "#e5e5e5";
 const AXIS = "#6b6b6b";
 
 const fmtDay = (d: string) => new Date(`${d}T00:00:00`).toLocaleDateString("en-AE", { day: "numeric", month: "short" });

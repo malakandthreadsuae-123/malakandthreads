@@ -7,23 +7,23 @@ const esc = (s: string | null | undefined) =>
 
 function layout(title: string, bodyHtml: string, preheader = "") {
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title></head>
-<body style="margin:0;background:#F8F5F0;font-family:Helvetica,Arial,sans-serif;color:#171717">
+<body style="margin:0;background:#FFFFFF;font-family:Helvetica,Arial,sans-serif;color:#0A0A0A">
 <span style="display:none;max-height:0;overflow:hidden">${esc(preheader)}</span>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#F8F5F0;padding:32px 12px"><tr><td align="center">
-<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border:1px solid #E9E1D6">
-<tr><td style="background:#171717;padding:28px;text-align:center">
-<div style="font-family:Georgia,'Times New Roman',serif;font-size:24px;letter-spacing:6px;color:#F8F5F0">MALAKAND</div>
-<div style="font-size:10px;letter-spacing:8px;color:#C5A46D;margin-top:4px">THREADS</div></td></tr>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#FFFFFF;padding:32px 12px"><tr><td align="center">
+<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border:1px solid #E5E5E5">
+<tr><td style="background:#0A0A0A;padding:28px;text-align:center">
+<div style="font-family:Georgia,'Times New Roman',serif;font-size:24px;letter-spacing:7px;color:#FFFFFF">MALAKAND</div>
+<div style="font-size:10px;letter-spacing:8px;color:#C6A15B;margin-top:4px">THREADS</div></td></tr>
 <tr><td style="padding:32px 28px;font-size:15px;line-height:1.6">${bodyHtml}</td></tr>
-<tr><td style="padding:20px 28px;background:#F8F5F0;font-size:12px;color:#6b6b6b;text-align:center;line-height:1.6">
+<tr><td style="padding:20px 28px;background:#FFFFFF;font-size:12px;color:#6b6b6b;text-align:center;line-height:1.6">
 MALAKAND THREADS · Premium fashion in the UAE<br>
-WhatsApp / Phone: +971 55 991 2484 · <a href="mailto:malakantradesuae@gmail.com" style="color:#8a6d3b">malakantradesuae@gmail.com</a><br>
-<a href="${absoluteUrl("/")}" style="color:#8a6d3b">${esc(absoluteUrl("/").replace(/^https?:\/\//, "").replace(/\/$/, ""))}</a></td></tr>
+WhatsApp / Phone: +971 55 991 2484 · <a href="mailto:malakantradesuae@gmail.com" style="color:#0A0A0A">malakantradesuae@gmail.com</a><br>
+<a href="${absoluteUrl("/")}" style="color:#0A0A0A">${esc(absoluteUrl("/").replace(/^https?:\/\//, "").replace(/\/$/, ""))}</a></td></tr>
 </table></td></tr></table></body></html>`;
 }
 
 const button = (href: string, label: string) =>
-  `<p style="margin:28px 0"><a href="${esc(href)}" style="background:#171717;color:#F8F5F0;text-decoration:none;padding:14px 28px;display:inline-block;letter-spacing:2px;font-size:13px;text-transform:uppercase">${esc(label)}</a></p>`;
+  `<p style="margin:28px 0"><a href="${esc(href)}" style="background:#0A0A0A;color:#FFFFFF;text-decoration:none;padding:14px 28px;display:inline-block;letter-spacing:2px;font-size:13px;text-transform:uppercase">${esc(label)}</a></p>`;
 
 const h1 = (t: string) => `<h1 style="font-family:Georgia,serif;font-weight:normal;font-size:24px;margin:0 0 16px">${esc(t)}</h1>`;
 
@@ -166,7 +166,7 @@ export function orderStatusEmail(o: OrderEmailData, status: OrderStatusValue, no
   const copy = STATUS_COPY[status] ?? { subject: `Order update: ${ORDER_STATUS_LABELS[status]}`, heading: ORDER_STATUS_LABELS[status], body: "" };
   const tracking =
     o.shipment && (o.shipment.trackingNumber || o.shipment.courier)
-      ? `<p style="background:#F8F5F0;padding:14px">${o.shipment.courier ? `Courier: <strong>${esc(o.shipment.courier)}</strong><br>` : ""}${o.shipment.trackingNumber ? `Tracking number: <strong>${esc(o.shipment.trackingNumber)}</strong>` : ""}${o.shipment.trackingUrl ? `<br><a href="${esc(o.shipment.trackingUrl)}" style="color:#8a6d3b">Track with courier</a>` : ""}</p>`
+      ? `<p style="background:#FFFFFF;padding:14px">${o.shipment.courier ? `Courier: <strong>${esc(o.shipment.courier)}</strong><br>` : ""}${o.shipment.trackingNumber ? `Tracking number: <strong>${esc(o.shipment.trackingNumber)}</strong>` : ""}${o.shipment.trackingUrl ? `<br><a href="${esc(o.shipment.trackingUrl)}" style="color:#0A0A0A">Track with courier</a>` : ""}</p>`
       : "";
   const template =
     status === "CANCELLED" ? "order_cancelled" : status === "REFUNDED" ? "order_refunded" : status === "DELIVERED" ? "order_delivered" : status === "SHIPPED" ? "order_shipped" : "order_status";

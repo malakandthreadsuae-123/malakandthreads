@@ -69,7 +69,7 @@ export function VideoStory({ title, subtitle, video, poster, href, cta }: { titl
           <source src={video} type="video/mp4" />
         </video>
       )}
-      <div className="absolute inset-0 -z-10 bg-gradient-to-t from-charcoal/95 via-charcoal/40 to-charcoal/10 md:bg-gradient-to-l md:from-charcoal/90 md:via-charcoal/40 md:to-transparent" aria-hidden />
+      <div className="absolute inset-0 -z-10 bg-gradient-to-t from-ink/95 via-ink/40 to-ink/10 md:bg-gradient-to-l md:from-ink/90 md:via-ink/40 md:to-transparent" aria-hidden />
 
       <div className="container-luxe flex justify-end pb-16 pt-32 md:py-24">
         <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-80px" }} transition={{ duration: 1, ease }} className="max-w-xl text-ivory md:text-right">

@@ -114,7 +114,7 @@ export async function ProductListing({
               <ul className="mx-auto flex w-max gap-2 lg:w-auto lg:flex-wrap lg:justify-center">
                 {[{ name: "New In", href: "/new-arrivals" }, ...menu.map((c) => ({ name: c.name, href: `/category/${c.slug}` })), { name: "Sale", href: "/sale" }].map((c) => (
                   <li key={c.href}>
-                    <Link href={c.href} className={cn("block whitespace-nowrap rounded-full border px-4 py-2 text-[13px] transition", c.href === basePath ? "border-charcoal bg-charcoal text-ivory" : "border-line bg-white hover:border-charcoal")}>
+                    <Link href={c.href} className={cn("block whitespace-nowrap rounded-none border px-4 py-2 text-[13px] transition", c.href === basePath ? "border-charcoal bg-charcoal text-ivory" : "border-line bg-white hover:border-charcoal")}>
                       {c.name}
                     </Link>
                   </li>

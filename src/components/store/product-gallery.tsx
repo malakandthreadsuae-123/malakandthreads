@@ -23,7 +23,7 @@ export function ProductGallery({ images, name }: { images: Img[]; name: string }
         <ul className="flex gap-3 overflow-x-auto lg:w-20 lg:flex-col" aria-label="Product images">
           {images.map((img, i) => (
             <li key={img.id} className="shrink-0">
-              <button type="button" onClick={() => setIndex(i)} aria-label={`Show image ${i + 1}`} aria-current={i === index} className={cn("relative block h-24 w-[72px] overflow-hidden rounded-lg border-2 transition lg:h-[106px] lg:w-20", i === index ? "border-charcoal" : "border-transparent opacity-70 hover:opacity-100")}>
+              <button type="button" onClick={() => setIndex(i)} aria-label={`Show image ${i + 1}`} aria-current={i === index} className={cn("relative block h-24 w-[72px] overflow-hidden rounded-sm border-2 transition lg:h-[106px] lg:w-20", i === index ? "border-charcoal" : "border-transparent opacity-70 hover:opacity-100")}>
                 <Image src={img.url} alt="" fill sizes="80px" className="object-cover" />
               </button>
             </li>
@@ -32,7 +32,7 @@ export function ProductGallery({ images, name }: { images: Img[]; name: string }
       )}
       <div className="relative flex-1">
         <div
-          className="relative aspect-[3/4] cursor-zoom-in overflow-hidden rounded-2xl bg-sand"
+          className="relative aspect-[3/4] cursor-zoom-in overflow-hidden rounded-sm bg-sand"
           onMouseMove={(e) => {
             const r = e.currentTarget.getBoundingClientRect();
             setZoom({ x: ((e.clientX - r.left) / r.width) * 100, y: ((e.clientY - r.top) / r.height) * 100 });

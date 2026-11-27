@@ -5,12 +5,11 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { ArrowRight, ChevronDown, Heart, Menu, PackageSearch, Search, ShoppingBag, User } from "lucide-react";
+import { ArrowRight, Heart, Menu, Search, ShoppingBag, Sparkles, User } from "lucide-react";
 import { Logo } from "@/components/ui/primitives";
 import { WhatsAppIcon } from "@/components/ui/icons";
 import { useStore } from "@/components/providers/store";
 import { whatsappLink } from "@/lib/whatsapp";
-import { SearchBox } from "./search-box";
 import { SearchOverlay } from "./search-overlay";
 import { MobileMenu } from "./mobile-menu";
 import { cn } from "@/lib/utils";
@@ -47,6 +46,8 @@ export function Header({ categories, brands }: { categories: MenuCategory[]; bra
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [hoverKey, setHoverKey] = useState<string | null>(null);
+  const [msg, setMsg] = useState(0);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const nav = buildNav(categories);
 
@@ -74,9 +75,7 @@ export function Header({ categories, brands }: { categories: MenuCategory[]; bra
       if (e.key === "Escape") setOpenMenu(null);
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
-        const el = document.getElementById("header-search");
-        if (el && el.offsetParent) el.focus();
-        else setSearchOpen(true);
+        setSearchOpen(true);
       }
     };
     const onOpenMenu = () => setMobileOpen(true);
@@ -90,6 +89,19 @@ export function Header({ categories, brands }: { categories: MenuCategory[]; bra
       window.removeEventListener("mt:open-search", onOpenSearch);
     };
   }, []);
+
+  const messages = settings.announcement
+    ? settings.announcement.split(/\s+[·|•]\s+/).filter(Boolean)
+    : [
+        settings.freeShippingThreshold > 0 ? `Free UAE delivery over AED ${Math.round(settings.freeShippingThreshold / 100)}` : "Delivery to all seven emirates",
+        settings.codEnabled ? "Cash on Delivery across the UAE" : "Secure online payment",
+        "Pakistani designer labels, styled for the UAE",
+      ];
+  useEffect(() => {
+    if (messages.length < 2) return;
+    const id = window.setInterval(() => setMsg((m) => m + 1), 4500);
+    return () => window.clearInterval(id);
+  }, [messages.length]);
 
   const enter = (key: string) => {
     if (closeTimer.current) clearTimeout(closeTimer.current);
@@ -106,30 +118,27 @@ export function Header({ categories, brands }: { categories: MenuCategory[]; bra
   // the visitor scrolls, hovers it, or opens a menu.
   const clear = pathname === "/" && !scrolled && !hovered && !openMenu && !mobileOpen;
 
-  const iconBtn = cn("group relative flex flex-col items-center gap-1 px-2.5 py-1 transition-colors", clear ? "text-ivory/90 hover:text-ivory" : "text-charcoal/80 hover:text-charcoal");
-  const iconLabel = "hidden text-[10px] font-medium uppercase tracking-[0.12em] xl:block";
+  const iconBtn = cn("relative flex h-10 w-10 items-center justify-center rounded-full transition-all duration-300 hover:-translate-y-px", clear ? "text-ivory hover:bg-white/10" : "text-charcoal hover:bg-sand");
+  const badge = "absolute right-0.5 top-0.5 flex h-[17px] min-w-[17px] items-center justify-center rounded-full px-1 text-[10px] font-bold";
 
   return (
     <>
-      {/* Utility bar */}
-      <div className="hidden bg-charcoal text-[12px] text-ivory/80 lg:block">
-        <div className="container-luxe flex h-9 items-center justify-between">
-          <p className="truncate">
-            {settings.announcement || (
-              <>
-                {settings.freeShippingThreshold > 0 ? `Free UAE delivery over AED ${Math.round(settings.freeShippingThreshold / 100)}` : "Delivery to all seven emirates"}
-                <span className="mx-3 text-ivory/30">|</span>
-                {settings.codEnabled ? "Cash on Delivery available" : "Secure online payment"}
-              </>
-            )}
-          </p>
-          <nav aria-label="Utility" className="flex items-center gap-6">
-            <Link href="/track-order" className="flex items-center gap-1.5 hover:text-ivory">
-              <PackageSearch className="h-3.5 w-3.5" aria-hidden /> Track order
-            </Link>
-            <Link href="/faq" className="hover:text-ivory">Help</Link>
-            <Link href="/contact" className="hover:text-ivory">Contact</Link>
-            <a href={whatsappLink(settings.whatsappNumber, settings.whatsappWelcomeMessage)} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-gold hover:text-ivory">
+      {/* Announcement bar with rotating messages */}
+      <div className="hidden border-b border-gold/30 bg-charcoal text-[11.5px] tracking-[0.06em] text-ivory/80 lg:block">
+        <div className="container-luxe grid h-9 grid-cols-[1fr_auto_1fr] items-center">
+          <Link href="/track-order" className="justify-self-start transition-colors hover:text-gold">Track your order</Link>
+          <div className="relative flex h-9 w-[min(520px,46vw)] items-center justify-center overflow-hidden" aria-live="off">
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.p key={msg % messages.length} initial={{ y: 14, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -14, opacity: 0 }} transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }} className="flex items-center gap-3 truncate">
+                <Sparkles className="h-3 w-3 shrink-0 text-gold" aria-hidden />
+                {messages[msg % messages.length]}
+                <Sparkles className="h-3 w-3 shrink-0 text-gold" aria-hidden />
+              </motion.p>
+            </AnimatePresence>
+          </div>
+          <nav aria-label="Utility" className="flex items-center gap-6 justify-self-end">
+            <Link href="/contact" className="transition-colors hover:text-gold">Contact</Link>
+            <a href={whatsappLink(settings.whatsappNumber, settings.whatsappWelcomeMessage)} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-gold transition-colors hover:text-ivory">
               <WhatsAppIcon className="h-3.5 w-3.5" /> {settings.contactPhone}
             </a>
           </nav>
@@ -148,83 +157,93 @@ export function Header({ categories, brands }: { categories: MenuCategory[]; bra
           leave();
         }}
       >
-        {/* Main bar */}
-        <div className="container-luxe">
-          <div className={cn("flex items-center gap-4 transition-all duration-300 lg:gap-8", compact ? "h-16" : "h-[72px] lg:h-20")}>
-            <div className="flex items-center lg:hidden">
-              <button type="button" onClick={() => setMobileOpen(true)} className="-ml-2 p-2" aria-label="Open menu" aria-expanded={mobileOpen}>
-                <Menu className="h-6 w-6" />
-              </button>
-            </div>
-            <Link href="/" className="flex-1 lg:flex-none" title="MALAKAND THREADS — home">
-              <Logo light={clear} className="mx-auto transition-colors lg:mx-0" />
+        {/* Gold hairline once the header turns solid */}
+        <span aria-hidden className={cn("pointer-events-none absolute inset-x-0 -bottom-px h-px bg-gradient-to-r from-transparent via-gold/70 to-transparent transition-opacity duration-500", clear ? "opacity-0" : "opacity-100")} />
+        {/* One clean row: logo · navigation · icons */}
+        <div className={cn("container-luxe flex items-center gap-4 transition-[height] duration-300", compact ? "h-16" : "h-[72px] lg:h-20")}>
+          <div className="flex flex-1 items-center lg:hidden">
+            <button type="button" onClick={() => setMobileOpen(true)} className="-ml-2 p-2" aria-label="Open menu" aria-expanded={mobileOpen}>
+              <Menu className="h-6 w-6" />
+            </button>
+          </div>
+
+          <Link href="/" className="shrink-0" title="MALAKAND THREADS — home">
+            <Logo light={clear} className="transition-colors" />
+          </Link>
+
+          <nav aria-label="Main" className="hidden h-full min-w-0 flex-1 justify-center lg:flex">
+            <ul className="flex h-full items-center" onMouseLeave={() => setHoverKey(null)}>
+              {nav.map((item) => {
+                const hasPanel = item.kind !== "link";
+                const isSale = item.kind === "link" && item.accent;
+                const current = hoverKey ?? openMenu ?? nav.find((n) => active(n.href))?.key ?? null;
+                const on = active(item.href) || openMenu === item.key;
+                return (
+                  <li key={item.key} onMouseEnter={() => { setHoverKey(item.key); if (hasPanel) enter(item.key); else setOpenMenu(null); }} className={cn("h-full", item.key === "best" && "hidden xl:block")}>
+                    <Link
+                      href={item.href}
+                      onFocus={() => { setHoverKey(item.key); if (hasPanel) enter(item.key); }}
+                      aria-expanded={hasPanel ? openMenu === item.key : undefined}
+                      aria-haspopup={hasPanel ? "true" : undefined}
+                      className={cn(
+                        "relative flex h-full items-center gap-1.5 whitespace-nowrap px-2 text-[11px] font-medium uppercase tracking-[0.14em] transition-colors duration-300 xl:px-4 xl:text-[11.5px] xl:tracking-[0.2em]",
+                        isSale
+                          ? ""
+                          : clear
+                            ? "text-ivory/85 hover:text-gold"
+                            : on
+                              ? "text-charcoal"
+                              : "text-charcoal/65 hover:text-gold-dark",
+                      )}
+                    >
+                      {item.key === "new" && (
+                        <span aria-hidden className="relative flex h-1.5 w-1.5">
+                          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-gold opacity-60" />
+                          <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-gold" />
+                        </span>
+                      )}
+                      {isSale ? (
+                        <span className={cn("border px-3 py-1 transition-colors duration-300", clear ? "border-gold text-gold hover:bg-gold hover:text-charcoal" : "border-charcoal bg-charcoal text-gold hover:bg-gold hover:text-charcoal")}>{item.label}</span>
+                      ) : (
+                        item.label
+                      )}
+                      {current === item.key && !isSale && (
+                        <motion.span layoutId="nav-indicator" transition={{ type: "spring", stiffness: 420, damping: 36 }} className="absolute inset-x-2 bottom-[20px] flex items-center justify-center xl:inset-x-4" aria-hidden>
+                          <span className="h-px flex-1 bg-gradient-to-r from-transparent to-gold" />
+                          <span className="mx-1 h-1 w-1 rotate-45 bg-gold" />
+                          <span className="h-px flex-1 bg-gradient-to-l from-transparent to-gold" />
+                        </motion.span>
+                      )}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
+
+          <div className="flex flex-1 items-center justify-end gap-0.5 lg:flex-none">
+            <button type="button" onClick={() => setSearchOpen(true)} className={iconBtn} aria-label="Search products" title="Search (Ctrl K)">
+              <Search className="h-[19px] w-[19px]" strokeWidth={1.6} />
+            </button>
+            <Link href={customer ? "/account" : "/account/login"} className={cn(iconBtn, "hidden lg:flex")} aria-label={customer ? "My account" : "Sign in"}>
+              <User className="h-[19px] w-[19px]" strokeWidth={1.6} />
             </Link>
-            <SearchBox tone={clear ? "light" : "default"} className="hidden flex-1 lg:block lg:max-w-xl xl:max-w-2xl" />
-            <div className="flex items-center justify-end lg:ml-auto">
-              <button type="button" onClick={() => setSearchOpen(true)} className="p-2 lg:hidden" aria-label="Search products">
-                <Search className="h-[22px] w-[22px]" />
-              </button>
-              <Link href={customer ? "/account" : "/account/login"} className={cn(iconBtn, "hidden lg:flex")} aria-label={customer ? "My account" : "Sign in"}>
-                <User className="h-[22px] w-[22px]" />
-                <span className={iconLabel} aria-hidden>{customer ? customer.name.split(" ")[0] : "Sign in"}</span>
-              </Link>
-              <Link href="/wishlist" className={cn(iconBtn, "hidden lg:flex")} aria-label={`Wishlist (${wishlist.size} items)`}>
-                <span className="relative">
-                  <Heart className="h-[22px] w-[22px]" />
-                  {wishlist.size > 0 && <span className="absolute -right-2 -top-1.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-gold px-1 text-[10px] font-bold text-charcoal">{wishlist.size}</span>}
-                </span>
-                <span className={iconLabel} aria-hidden>Wishlist</span>
-              </Link>
-              <button type="button" onClick={() => setCartOpen(true)} className={cn(iconBtn, "-mr-2 lg:mr-0")} aria-label={`Shopping bag (${count} items)`}>
-                <span className="relative">
-                  <ShoppingBag className="h-[22px] w-[22px]" />
-                  <AnimatePresence>
-                    {count > 0 && (
-                      <motion.span key={count} initial={{ scale: 0.4 }} animate={{ scale: 1 }} className="absolute -right-2 -top-1.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-charcoal px-1 text-[10px] font-bold text-ivory">
-                        {count}
-                      </motion.span>
-                    )}
-                  </AnimatePresence>
-                </span>
-                <span className={iconLabel} aria-hidden>Bag</span>
-              </button>
-            </div>
+            <Link href="/wishlist" className={cn(iconBtn, "hidden lg:flex")} aria-label={`Wishlist (${wishlist.size} items)`}>
+              <Heart className="h-[19px] w-[19px]" strokeWidth={1.6} />
+              {wishlist.size > 0 && <span className={cn(badge, "bg-gold text-charcoal")}>{wishlist.size}</span>}
+            </Link>
+            <button type="button" onClick={() => setCartOpen(true)} className={cn(iconBtn, "-mr-2 lg:mr-0")} aria-label={`Shopping bag (${count} items)`}>
+              <ShoppingBag className="h-[19px] w-[19px]" strokeWidth={1.6} />
+              <AnimatePresence>
+                {count > 0 && (
+                  <motion.span key={count} initial={{ scale: 0.4 }} animate={{ scale: 1 }} className={cn(badge, clear ? "bg-gold text-charcoal" : "bg-charcoal text-ivory")}>
+                    {count}
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </button>
           </div>
         </div>
-
-        {/* Category navigation (desktop) */}
-        <nav aria-label="Main" className={cn("hidden border-t transition-colors duration-500 lg:block", clear ? "border-white/15" : "border-line")}>
-          <ul className="container-luxe flex h-12 items-center justify-center gap-1 xl:gap-3">
-            {nav.map((item) => {
-              const hasPanel = item.kind !== "link";
-              return (
-                <li key={item.key} onMouseEnter={() => (hasPanel ? enter(item.key) : setOpenMenu(null))} className="h-full">
-                  <Link
-                    href={item.href}
-                    onFocus={() => hasPanel && enter(item.key)}
-                    aria-expanded={hasPanel ? openMenu === item.key : undefined}
-                    aria-haspopup={hasPanel ? "true" : undefined}
-                    className={cn(
-                      "relative flex h-full items-center gap-1 px-3 text-[12.5px] font-medium uppercase tracking-[0.18em] transition-colors",
-                      item.kind === "link" && item.accent
-                        ? clear
-                          ? "text-gold hover:text-ivory"
-                          : "text-danger hover:text-danger/80"
-                        : clear
-                          ? "text-ivory/85 hover:text-ivory"
-                          : "text-charcoal/75 hover:text-charcoal",
-                      !clear && (active(item.href) || openMenu === item.key) && "text-charcoal",
-                    )}
-                  >
-                    {item.label}
-                    {hasPanel && <ChevronDown className={cn("h-3.5 w-3.5 transition-transform", openMenu === item.key && "rotate-180")} aria-hidden />}
-                    <span className={cn("absolute inset-x-3 bottom-0 h-0.5 origin-left bg-gold transition-transform duration-300", active(item.href) || openMenu === item.key ? "scale-x-100" : "scale-x-0")} aria-hidden />
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
 
         {/* Mega menu panel */}
         <AnimatePresence>
@@ -233,12 +252,13 @@ export function Header({ categories, brands }: { categories: MenuCategory[]; bra
               key={openItem.key}
               onMouseEnter={() => enter(openItem.key)}
               onMouseLeave={leave}
-              initial={{ opacity: 0, y: -8 }}
+              initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
               className="absolute inset-x-0 top-full hidden border-t border-line bg-white shadow-[0_30px_60px_-20px_rgba(0,0,0,0.25)] lg:block"
             >
+              <span aria-hidden className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold to-transparent" />
               <div className="container-luxe py-10">
                 {openItem.kind === "category" && <CategoryPanel category={openItem.category} />}
                 {openItem.kind === "collections" && <CollectionsPanel items={openItem.items} />}
@@ -266,13 +286,13 @@ function CategoryPanel({ category }: { category: MenuCategory }) {
         <PanelHeading>Shop {category.name}</PanelHeading>
         <ul className="space-y-1">
           <li>
-            <Link href={`/category/${category.slug}`} className="flex items-center justify-between rounded-md px-3 py-2.5 text-[15px] font-medium hover:bg-sand">
+            <Link href={`/category/${category.slug}`} className="flex items-center justify-between rounded-sm px-3 py-2.5 text-[15px] font-medium hover:bg-sand">
               View all <ArrowRight className="h-4 w-4 text-gold-dark" aria-hidden />
             </Link>
           </li>
           {category.children.map((ch) => (
             <li key={ch.slug}>
-              <Link href={`/category/${ch.slug}`} className="block rounded-md px-3 py-2.5 text-[15px] text-charcoal/80 hover:bg-sand hover:text-charcoal">
+              <Link href={`/category/${ch.slug}`} className="block rounded-sm px-3 py-2.5 text-[15px] text-charcoal/80 hover:bg-sand hover:text-charcoal">
                 {ch.name}
               </Link>
             </li>
@@ -289,14 +309,14 @@ function CategoryPanel({ category }: { category: MenuCategory }) {
             ["Under AED 200", `/category/${category.slug}?maxPrice=200`],
           ].map(([l, h]) => (
             <li key={h}>
-              <Link href={h} className="block rounded-md px-3 py-2.5 text-charcoal/80 hover:bg-sand hover:text-charcoal">
+              <Link href={h} className="block rounded-sm px-3 py-2.5 text-charcoal/80 hover:bg-sand hover:text-charcoal">
                 {l}
               </Link>
             </li>
           ))}
         </ul>
       </div>
-      <Link href={`/category/${category.slug}`} className="group col-span-6 grid grid-cols-2 items-stretch overflow-hidden rounded-xl bg-sand">
+      <Link href={`/category/${category.slug}`} className="group col-span-6 grid grid-cols-2 items-stretch overflow-hidden rounded-sm bg-sand">
         <div className="relative min-h-[260px]">{category.image && <Image src={category.image} alt={category.name} fill sizes="360px" className="object-cover transition-transform duration-700 group-hover:scale-105" />}</div>
         <div className="flex flex-col justify-center p-8">
           <p className="eyebrow">Featured</p>
@@ -316,7 +336,7 @@ function CollectionsPanel({ items }: { items: MenuCategory[] }) {
       <div className="grid grid-cols-4 gap-5">
         {items.map((c) => (
           <Link key={c.id} href={`/category/${c.slug}`} className="group block">
-            <div className="relative aspect-[4/3] overflow-hidden rounded-lg bg-sand">
+            <div className="relative aspect-[4/3] overflow-hidden rounded-sm bg-sand">
               {c.image && <Image src={c.image} alt={c.name} fill sizes="300px" className="object-cover transition-transform duration-700 group-hover:scale-105" />}
             </div>
             <p className="mt-3 flex items-center justify-between text-[15px] font-medium">
@@ -337,14 +357,14 @@ function BrandsPanel({ brands }: { brands: MenuBrand[] }) {
         <ul className="grid grid-cols-4 gap-3">
           {brands.map((b) => (
             <li key={b.slug}>
-              <Link href={`/brands/${b.slug}`} className="flex h-16 items-center justify-center rounded-lg border border-line px-3 text-center font-serif text-[17px] tracking-[0.06em] transition hover:border-charcoal hover:bg-sand">
+              <Link href={`/brands/${b.slug}`} className="flex h-16 items-center justify-center rounded-sm border border-line px-3 text-center font-serif text-[17px] tracking-[0.06em] transition hover:border-charcoal hover:bg-sand">
                 {b.name}
               </Link>
             </li>
           ))}
         </ul>
       </div>
-      <div className="col-span-3 flex flex-col justify-between rounded-xl bg-charcoal p-7 text-ivory">
+      <div className="col-span-3 flex flex-col justify-between rounded-sm bg-charcoal p-7 text-ivory">
         <div>
           <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-gold">All labels</p>
           <p className="mt-3 font-serif text-2xl">Explore every brand collection</p>

@@ -143,7 +143,7 @@ export function Footer({ settings, categories, pages }: { settings: SiteSettings
           {payments.length > 0 && (
             <ul className="flex flex-wrap items-center gap-2" aria-label="Payment methods">
               {payments.map((p) => (
-                <li key={p} className="rounded-md border border-white/15 px-2.5 py-1 text-[11px] font-medium text-ivory/75">
+                <li key={p} className="rounded-sm border border-white/15 px-2.5 py-1 text-[11px] font-medium text-ivory/75">
                   {p}
                 </li>
               ))}

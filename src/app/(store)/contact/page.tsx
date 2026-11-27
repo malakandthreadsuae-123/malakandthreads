@@ -28,8 +28,8 @@ export default async function ContactPage() {
       </header>
       <div className="grid gap-10 lg:grid-cols-[1fr_1.3fr]">
         <div className="space-y-4">
-          <a href={whatsappLink(s.whatsappNumber, s.whatsappWelcomeMessage)} target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 border border-line bg-white p-6 hover:border-[#1f8f4e]">
-            <WhatsAppIcon className="h-7 w-7 text-[#1f8f4e]" />
+          <a href={whatsappLink(s.whatsappNumber, s.whatsappWelcomeMessage)} target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 border border-line bg-white p-6 hover:border-charcoal">
+            <WhatsAppIcon className="h-7 w-7 text-charcoal" />
             <div>
               <p className="font-medium">WhatsApp (fastest)</p>
               <p className="text-[14px] text-muted">{s.contactPhone}</p>

@@ -76,7 +76,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   analytics: {
     ga4Id: "",
     gtmId: "",
-    googleSiteVerification: "",
+    googleSiteVerification: "txnHgs6tU8MCzYs7Rc-y6PYbdkzXH9_WbYvX9xHFQ5A", // Google Search Console (HTML tag method)
     bingSiteVerification: "",
     merchantCenterVerification: "",
     metaPixelId: "",

@@ -31,8 +31,8 @@ test("canonical URLs always use the production domain", async ({ page }) => {
 
 test("live search shows suggestions and a results page", async ({ page }) => {
   await page.goto("/");
-  const box = page.locator("#header-search");
-  await box.click();
+  await page.getByRole("button", { name: "Search products" }).click();
+  const box = page.locator("#site-search");
   await box.fill("abaya");
   await expect(page.getByRole("link", { name: /abaya/i }).first()).toBeVisible();
   await page.keyboard.press("Enter");

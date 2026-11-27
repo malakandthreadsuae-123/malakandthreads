@@ -139,7 +139,7 @@ export function SortSelect() {
   return (
     <label className="flex items-center gap-2 text-[13px]">
       <span className="hidden text-muted sm:inline">Sort by</span>
-      <select value={params.get("sort") ?? "newest"} onChange={(e) => set({ sort: e.target.value === "newest" ? null : e.target.value })} className={cn("rounded-full border border-line bg-white px-4 py-2.5 text-[13px] focus:border-charcoal focus:outline-none", pending && "opacity-60")} aria-label="Sort products">
+      <select value={params.get("sort") ?? "newest"} onChange={(e) => set({ sort: e.target.value === "newest" ? null : e.target.value })} className={cn("rounded-none border border-line bg-white px-4 py-2.5 text-[13px] focus:border-charcoal focus:outline-none", pending && "opacity-60")} aria-label="Sort products">
         {SORT_OPTIONS.map((o) => (
           <option key={o.value} value={o.value}>
             {o.label}
@@ -163,7 +163,7 @@ export function ActiveFilters({ facets }: { facets: Facets }) {
   return (
     <div className="mb-6 flex flex-wrap items-center gap-2">
       {chips.map((c) => (
-        <button key={c.label} type="button" onClick={c.remove} className="inline-flex items-center gap-1.5 rounded-full border border-line bg-white px-3 py-1.5 text-[12px] hover:border-charcoal" aria-label={`Remove filter ${c.label}`}>
+        <button key={c.label} type="button" onClick={c.remove} className="inline-flex items-center gap-1.5 rounded-none border border-line bg-white px-3 py-1.5 text-[12px] hover:border-charcoal" aria-label={`Remove filter ${c.label}`}>
           {c.label} <X className="h-3 w-3" aria-hidden />
         </button>
       ))}
@@ -181,7 +181,7 @@ export function FilterSidebar({ facets, hideBrand }: { facets: Facets; hideBrand
       <aside className="hidden lg:block" aria-label="Product filters">
         <FilterPanel facets={facets} hideBrand={hideBrand} />
       </aside>
-      <button type="button" onClick={() => setOpen(true)} className="inline-flex items-center gap-2 rounded-full border border-line bg-white px-4 py-2.5 text-[12px] font-medium uppercase tracking-[0.18em] lg:hidden">
+      <button type="button" onClick={() => setOpen(true)} className="inline-flex items-center gap-2 rounded-none border border-line bg-white px-4 py-2.5 text-[12px] font-medium uppercase tracking-[0.18em] lg:hidden">
         <SlidersHorizontal className="h-4 w-4" aria-hidden /> Filter
       </button>
       <Drawer open={open} onClose={() => setOpen(false)} title="Filter" side="left">

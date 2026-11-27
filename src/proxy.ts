@@ -73,7 +73,7 @@ export async function proxy(req: NextRequest) {
     if (rule) {
       if (rule.statusCode === 410) {
         return new NextResponse(
-          `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="robots" content="noindex"><title>No longer available | MALAKAND THREADS</title></head><body style="font-family:Georgia,serif;text-align:center;padding:80px 20px;background:#F8F5F0;color:#171717"><h1 style="font-weight:normal">This page is no longer available</h1><p>The item you are looking for has been permanently removed.</p><p><a href="/shop" style="color:#8a6d3b">Continue shopping</a></p></body></html>`,
+          `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="robots" content="noindex"><title>No longer available | MALAKAND THREADS</title></head><body style="font-family:Georgia,serif;text-align:center;padding:80px 20px;background:#FFFFFF;color:#0A0A0A"><h1 style="font-weight:normal">This page is no longer available</h1><p>The item you are looking for has been permanently removed.</p><p><a href="/shop" style="color:#0A0A0A">Continue shopping</a></p></body></html>`,
           { status: 410, headers: { "content-type": "text/html; charset=utf-8" } },
         );
       }

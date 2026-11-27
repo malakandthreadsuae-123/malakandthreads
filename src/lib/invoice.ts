@@ -33,8 +33,8 @@ type InvoiceOrder = {
   items: { productName: string; sku: string; size: string | null; color: string | null; quantity: number; unitPrice: number; lineTotal: number }[];
 };
 
-const CHARCOAL = "#171717";
-const GOLD = "#C5A46D";
+const CHARCOAL = "#0A0A0A";
+const GOLD = "#C6A15B";
 const MUTED = "#6b6b6b";
 
 /** Generates a branded A4 invoice PDF (uses built-in Helvetica/Times — no font files needed). */

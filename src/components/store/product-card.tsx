@@ -31,7 +31,7 @@ export function ProductCard({ product, priority = false, sizes = "(max-width: 64
 
   return (
     <article className="group relative flex flex-col">
-      <div className="relative aspect-[3/4] overflow-hidden rounded-xl bg-sand">
+      <div className="relative aspect-[3/4] overflow-hidden rounded-sm bg-sand">
         <Link href={`/product/${product.slug}`} aria-label={product.name} className="absolute inset-0 block">
           {product.image ? (
             <>
@@ -52,7 +52,7 @@ export function ProductCard({ product, priority = false, sizes = "(max-width: 64
 
         <div className="pointer-events-none absolute left-3 top-3 flex flex-col gap-1.5">
           {!product.inStock && <span className="badge bg-charcoal text-ivory">Sold out</span>}
-          {product.inStock && pct > 0 && <span className="badge bg-danger text-white">−{pct}%</span>}
+          {product.inStock && pct > 0 && <span className="badge bg-gold text-charcoal">−{pct}%</span>}
           {product.inStock && product.isNew && <span className="badge bg-ivory text-charcoal">New</span>}
           {product.isBestSeller && <span className="badge bg-gold text-charcoal">Best seller</span>}
           {product.inStock && product.lowStock && <span className="badge bg-white/95 text-warning">Low stock</span>}
@@ -65,7 +65,7 @@ export function ProductCard({ product, priority = false, sizes = "(max-width: 64
           aria-label={saved ? `Remove ${product.name} from wishlist` : `Save ${product.name} to wishlist`}
           aria-pressed={saved}
         >
-          <Heart className={cn("h-4 w-4 transition-transform active:scale-125", saved && "fill-danger text-danger")} />
+          <Heart className={cn("h-4 w-4 transition-transform active:scale-125", saved && "fill-charcoal text-charcoal")} />
         </button>
 
         {product.singleVariantId && (
@@ -75,12 +75,12 @@ export function ProductCard({ product, priority = false, sizes = "(max-width: 64
         )}
         <div className="absolute inset-x-3 bottom-3 translate-y-2 opacity-0 transition-all duration-500 group-focus-within:translate-y-0 group-focus-within:opacity-100 group-hover:translate-y-0 group-hover:opacity-100 max-lg:translate-y-0 max-lg:opacity-100">
           {product.singleVariantId ? (
-            <button type="button" onClick={quickAdd} disabled={adding} className="flex w-full items-center justify-center gap-2 rounded-full bg-white/95 py-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-charcoal shadow-md backdrop-blur hover:bg-charcoal hover:text-ivory max-lg:hidden">
+            <button type="button" onClick={quickAdd} disabled={adding} className="flex w-full items-center justify-center gap-2 rounded-none bg-white/95 py-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-charcoal shadow-md backdrop-blur hover:bg-charcoal hover:text-ivory max-lg:hidden">
               {added ? <Check className="h-3.5 w-3.5" aria-hidden /> : <Plus className="h-3.5 w-3.5" aria-hidden />}
               {adding ? "Adding…" : added ? "Added" : "Quick add"}
             </button>
           ) : product.inStock ? (
-            <Link href={`/product/${product.slug}`} className="flex w-full items-center justify-center rounded-full bg-white/95 py-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-charcoal shadow-md backdrop-blur hover:bg-charcoal hover:text-ivory max-lg:hidden">
+            <Link href={`/product/${product.slug}`} className="flex w-full items-center justify-center rounded-none bg-white/95 py-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-charcoal shadow-md backdrop-blur hover:bg-charcoal hover:text-ivory max-lg:hidden">
               Choose options
             </Link>
           ) : null}
@@ -90,7 +90,7 @@ export function ProductCard({ product, priority = false, sizes = "(max-width: 64
       <div className="flex flex-1 flex-col pt-4">
         {product.brand && <p className="text-[10.5px] uppercase tracking-[0.22em] text-muted">{product.brand}</p>}
         <Heading className="mt-1 font-sans text-[14.5px] leading-snug">
-          <Link href={`/product/${product.slug}`} className="hover:text-gold-dark">
+          <Link href={`/product/${product.slug}`} className="transition-colors hover:text-gold-dark">
             {product.name}
           </Link>
         </Heading>

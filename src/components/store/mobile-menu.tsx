@@ -60,17 +60,17 @@ export function MobileMenu({ open, onClose, categories, brands }: { open: boolea
           <nav aria-label="Mobile" className="px-4 py-4">
             <div className="mb-4 grid grid-cols-3 gap-2">
               {quick.map(({ href, label, Icon }) => (
-                <Link key={href} href={href} onClick={onClose} className={cn("flex flex-col items-center gap-1.5 rounded-lg border border-line py-3 text-[12px] font-medium", label === "Sale" && "text-danger")}>
+                <Link key={href} href={href} onClick={onClose} className={cn("flex flex-col items-center gap-1.5 rounded-sm border border-line py-3 text-[12px] font-medium", label === "Sale" && "text-danger")}>
                   <Icon className="h-5 w-5" aria-hidden /> {label}
                 </Link>
               ))}
             </div>
             <ul className="space-y-1">
               {categories.map((c) => (
-                <li key={c.id} className="overflow-hidden rounded-lg">
+                <li key={c.id} className="overflow-hidden rounded-sm">
                   {c.children.length ? (
                     <>
-                      <button type="button" className="flex w-full items-center gap-3 rounded-lg px-2 py-2 text-left hover:bg-sand" aria-expanded={expanded === c.id} onClick={() => setExpanded(expanded === c.id ? null : c.id)}>
+                      <button type="button" className="flex w-full items-center gap-3 rounded-sm px-2 py-2 text-left hover:bg-sand" aria-expanded={expanded === c.id} onClick={() => setExpanded(expanded === c.id ? null : c.id)}>
                         <Thumb src={c.image} />
                         <span className="flex-1 text-[15px] font-medium">{c.name}</span>
                         <ChevronDown className={cn("h-4 w-4 text-muted transition-transform", expanded === c.id && "rotate-180")} aria-hidden />
@@ -95,7 +95,7 @@ export function MobileMenu({ open, onClose, categories, brands }: { open: boolea
                       </AnimatePresence>
                     </>
                   ) : (
-                    <Link href={`/category/${c.slug}`} onClick={onClose} className="flex items-center gap-3 rounded-lg px-2 py-2 hover:bg-sand">
+                    <Link href={`/category/${c.slug}`} onClick={onClose} className="flex items-center gap-3 rounded-sm px-2 py-2 hover:bg-sand">
                       <Thumb src={c.image} />
                       <span className="flex-1 text-[15px] font-medium">{c.name}</span>
                       <ChevronRight className="h-4 w-4 text-muted" aria-hidden />
@@ -104,7 +104,7 @@ export function MobileMenu({ open, onClose, categories, brands }: { open: boolea
                 </li>
               ))}
               <li>
-                <Link href="/blog" onClick={onClose} className="flex items-center gap-3 rounded-lg px-2 py-3 text-[15px] font-medium hover:bg-sand">
+                <Link href="/blog" onClick={onClose} className="flex items-center gap-3 rounded-sm px-2 py-3 text-[15px] font-medium hover:bg-sand">
                   <span className="w-11" /> Journal & style guides
                 </Link>
               </li>
@@ -116,7 +116,7 @@ export function MobileMenu({ open, onClose, categories, brands }: { open: boolea
           <ul className="grid grid-cols-2 gap-2 p-4">
             {brands.map((b) => (
               <li key={b.slug}>
-                <Link href={`/brands/${b.slug}`} onClick={onClose} className="flex h-16 items-center justify-center rounded-lg border border-line px-2 text-center font-serif text-[16px]">
+                <Link href={`/brands/${b.slug}`} onClick={onClose} className="flex h-16 items-center justify-center rounded-sm border border-line px-2 text-center font-serif text-[16px]">
                   {b.name}
                 </Link>
               </li>
@@ -152,7 +152,7 @@ export function MobileMenu({ open, onClose, categories, brands }: { open: boolea
       </div>
 
       <div className="border-t border-line bg-white p-4">
-        <a href={whatsappLink(settings.whatsappNumber, settings.whatsappWelcomeMessage)} target="_blank" rel="noopener noreferrer" className="flex w-full items-center justify-center gap-2 rounded-full bg-[#157a40] py-3.5 text-[13px] font-semibold text-white">
+        <a href={whatsappLink(settings.whatsappNumber, settings.whatsappWelcomeMessage)} target="_blank" rel="noopener noreferrer" className="flex w-full items-center justify-center gap-2 rounded-none bg-charcoal py-3.5 text-[13px] font-semibold text-white">
           <WhatsAppIcon className="h-5 w-5" /> Chat with us on WhatsApp
         </a>
       </div>

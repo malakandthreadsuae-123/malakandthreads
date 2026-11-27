@@ -45,7 +45,7 @@ export function PromoBanners({ banners }: { banners: Banner[] }) {
       <div className="grid gap-5 md:grid-cols-2">
         {banners.map((b, i) => (
           <Reveal key={b.id} delay={i * 0.1}>
-            <Link href={b.ctaHref || "/shop"} className="group relative flex aspect-[4/3] items-end overflow-hidden rounded-2xl bg-charcoal sm:aspect-[16/11]">
+            <Link href={b.ctaHref || "/shop"} className="group relative flex aspect-[4/3] items-end overflow-hidden rounded-sm bg-charcoal sm:aspect-[16/11]">
               {b.imageUrl && <Image src={b.imageUrl} alt={b.imageAlt ?? b.title} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover opacity-90 transition-transform duration-[1200ms] group-hover:scale-105" />}
               <div className="absolute inset-0 bg-gradient-to-t from-charcoal/85 via-charcoal/25 to-transparent" aria-hidden />
               <div className="relative p-7 text-ivory sm:p-10">
@@ -77,7 +77,7 @@ export function SeasonalSplit({ title, banners }: { title: string; banners: Bann
         </Reveal>
         <div className="grid gap-6 lg:grid-cols-[1.3fr_1fr]">
           <Reveal>
-            <Link href={main.ctaHref || "/shop"} className="group relative block aspect-[4/5] overflow-hidden rounded-2xl sm:aspect-[16/12] lg:aspect-auto lg:h-full lg:min-h-[560px]">
+            <Link href={main.ctaHref || "/shop"} className="group relative block aspect-[4/5] overflow-hidden rounded-sm sm:aspect-[16/12] lg:aspect-auto lg:h-full lg:min-h-[560px]">
               {main.imageUrl && <Image src={main.imageUrl} alt={main.imageAlt ?? main.title} fill sizes="(max-width: 1024px) 100vw, 60vw" className="object-cover transition-transform duration-[1400ms] group-hover:scale-105" />}
               <div className="absolute inset-0 bg-gradient-to-t from-charcoal/80 to-transparent" aria-hidden />
               <div className="absolute bottom-0 p-8 text-ivory sm:p-12">
@@ -91,8 +91,8 @@ export function SeasonalSplit({ title, banners }: { title: string; banners: Bann
           <div className="grid gap-6">
             {rest.map((b, i) => (
               <Reveal key={b.id} delay={0.1 + i * 0.1}>
-                <Link href={b.ctaHref || "/shop"} className="group grid grid-cols-[1fr_1.1fr] items-center gap-6 rounded-2xl bg-white p-4 sm:p-5">
-                  <div className="relative aspect-[3/4] overflow-hidden rounded-xl bg-beige">
+                <Link href={b.ctaHref || "/shop"} className="group grid grid-cols-[1fr_1.1fr] items-center gap-6 rounded-sm bg-white p-4 sm:p-5">
+                  <div className="relative aspect-[3/4] overflow-hidden rounded-sm bg-beige">
                     {b.imageUrl && <Image src={b.imageUrl} alt={b.imageAlt ?? b.title} fill sizes="(max-width: 1024px) 45vw, 20vw" className="object-cover transition-transform duration-1000 group-hover:scale-105" />}
                   </div>
                   <div>
@@ -153,7 +153,7 @@ export function Testimonials({ title, items }: { title: string; items: { id: str
       <div className="grid gap-6 md:grid-cols-3">
         {items.slice(0, 3).map((t, i) => (
           <Reveal key={t.id} delay={i * 0.1}>
-            <figure className="flex h-full flex-col rounded-2xl border border-line bg-white p-8">
+            <figure className="flex h-full flex-col rounded-sm border border-line bg-white p-8">
               {t.rating && <Stars rating={t.rating} />}
               <blockquote className="mt-5 flex-1 font-serif text-lg leading-relaxed">“{t.text}”</blockquote>
               <figcaption className="mt-6 text-[12px] uppercase tracking-[0.2em] text-muted">

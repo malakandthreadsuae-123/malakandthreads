@@ -16,16 +16,14 @@ export function TrustStrip({ freeThreshold, returnsDays, cod }: { freeThreshold:
     { Icon: MessageCircle, title: "WhatsApp styling help", text: "Real people, quick replies" },
   ];
   return (
-    <section aria-label="Why shop with us" className="bg-sand">
-      <ul className="container-luxe grid grid-cols-2 gap-x-4 gap-y-5 py-6 lg:grid-cols-4">
-        {items.map(({ Icon, title, text }) => (
-          <li key={title} className="flex items-center gap-3">
-            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white text-gold-dark shadow-sm">
-              <Icon className="h-5 w-5" aria-hidden strokeWidth={1.6} />
-            </span>
+    <section aria-label="Why shop with us" className="border-b border-line bg-white">
+      <ul className="container-luxe grid grid-cols-2 lg:grid-cols-4">
+        {items.map(({ Icon, title, text }, i) => (
+          <li key={title} className={cn("flex items-center gap-3 py-5 sm:justify-center sm:py-6", i % 2 === 1 && "pl-4 max-lg:border-l max-lg:border-line", i > 0 && "lg:border-l lg:border-line lg:pl-4", i > 1 && "max-lg:border-t max-lg:border-line")}>
+            <Icon className="h-6 w-6 shrink-0 text-gold-dark" aria-hidden strokeWidth={1.4} />
             <span>
-              <span className="block text-[13px] font-semibold leading-tight">{title}</span>
-              <span className="block text-[12px] text-muted">{text}</span>
+              <span className="block text-[12px] font-medium uppercase leading-tight tracking-[0.12em]">{title}</span>
+              <span className="mt-0.5 block text-[12.5px] text-muted">{text}</span>
             </span>
           </li>
         ))}
@@ -41,7 +39,7 @@ export function CategorySpotlight({ title, subtitle, slug, image, products, reve
     <section className="container-luxe py-14 sm:py-16" aria-label={title}>
       <div className={cn("grid gap-6 lg:grid-cols-[1fr_1.35fr] lg:gap-10", reverse && "lg:[&>*:first-child]:order-2")}>
         <Reveal>
-          <Link href={`/category/${slug}`} className="group relative flex aspect-[4/5] items-end overflow-hidden rounded-2xl bg-charcoal sm:aspect-[16/11] lg:aspect-auto lg:h-full lg:min-h-[620px]">
+          <Link href={`/category/${slug}`} className="group relative flex aspect-[4/5] items-end overflow-hidden rounded-sm bg-charcoal sm:aspect-[16/11] lg:aspect-auto lg:h-full lg:min-h-[620px]">
             {image && <Image src={image} alt={`${title} collection`} fill sizes="(max-width: 1024px) 100vw, 42vw" className="object-cover opacity-90 transition-transform duration-[1400ms] group-hover:scale-105" />}
             <div className="absolute inset-0 bg-gradient-to-t from-charcoal/85 via-charcoal/20 to-transparent" aria-hidden />
             <div className="relative p-7 text-ivory sm:p-10">
@@ -84,7 +82,7 @@ export function ShopByPrice({ title }: { title: string }) {
             <Link
               href={t.href}
               className={cn(
-                "group flex aspect-[5/3] flex-col items-center justify-center rounded-2xl border text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-soft",
+                "group flex aspect-[5/3] flex-col items-center justify-center rounded-sm border text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-soft",
                 i === 3 ? "border-charcoal bg-charcoal text-ivory" : "border-line bg-white",
               )}
             >
@@ -107,23 +105,8 @@ export function ShopByPrice({ title }: { title: string }) {
 /** Brand grid with monogram cards. */
 export function BrandGrid({ title, subtitle, brands }: { title: string; subtitle?: string | null; brands: { name: string; slug: string; logo: string | null }[] }) {
   if (!brands.length) return null;
-  const ribbon = [...brands, ...brands];
   return (
-    <section className="relative isolate overflow-hidden bg-charcoal py-20 text-ivory sm:py-24" aria-label={title}>
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(60%_50%_at_50%_0%,rgba(197,164,109,0.18),transparent_70%)]" aria-hidden />
-
-      {/* Slow ribbon of label names (decorative; the links below are the real navigation) */}
-      <div className="mb-14 overflow-hidden border-y border-white/10 py-5" aria-hidden>
-        <div className="flex w-max animate-marquee">
-          {ribbon.map((b, i) => (
-            <span key={i} className="flex items-center gap-10 pr-10 font-serif text-3xl italic text-ivory/25 sm:text-4xl">
-              {b.name}
-              <span className="text-[14px] not-italic text-gold/70">✦</span>
-            </span>
-          ))}
-        </div>
-      </div>
-
+    <section className="bg-charcoal py-20 text-ivory sm:py-24" aria-label={title}>
       <div className="container-luxe">
         <Reveal className="mb-12 flex flex-col items-center text-center">
           <p className="mb-4 flex items-center gap-4 text-[11px] font-medium uppercase tracking-[0.34em] text-gold">
@@ -131,7 +114,7 @@ export function BrandGrid({ title, subtitle, brands }: { title: string; subtitle
             Labels we love
             <span aria-hidden className="h-px w-8 bg-gold/70" />
           </p>
-          <h2 className="text-4xl sm:text-5xl">{title}</h2>
+          <h2 className="text-[34px] leading-[1.1] sm:text-[46px]">{title}</h2>
           {subtitle && <p className="mt-4 max-w-xl text-[15px] text-ivory/65">{subtitle}</p>}
         </Reveal>
         <ul className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
@@ -140,7 +123,7 @@ export function BrandGrid({ title, subtitle, brands }: { title: string; subtitle
               <Reveal delay={(i % 4) * 0.06}>
                 <Link
                   href={`/brands/${b.slug}`}
-                  className="group relative flex h-32 flex-col items-center justify-center gap-3 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] px-3 text-center transition-all duration-500 hover:-translate-y-1 hover:border-gold/60 hover:bg-white/[0.07] sm:h-40"
+                  className="group relative flex h-28 flex-col items-center justify-center gap-2 overflow-hidden border border-white/12 px-3 text-center transition-colors duration-500 hover:border-gold sm:h-36"
                 >
                   <span aria-hidden className="absolute inset-x-6 top-0 h-px origin-center scale-x-0 bg-gradient-to-r from-transparent via-gold to-transparent transition-transform duration-700 group-hover:scale-x-100" />
                   {b.logo ? (

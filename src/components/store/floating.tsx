@@ -47,7 +47,7 @@ export function FloatingActions() {
         }}
         target="_blank"
         rel="noopener noreferrer"
-        className="group flex h-14 items-center gap-2 rounded-full bg-[#157a40] pl-4 pr-4 text-white shadow-soft transition-all hover:bg-[#106434] sm:pr-5"
+        className="group flex h-14 items-center gap-2 rounded-full border border-gold/50 bg-charcoal pl-4 pr-4 text-white shadow-soft transition-all hover:bg-charcoal-soft sm:pr-5"
         aria-label="Chat with us on WhatsApp"
       >
         <WhatsAppIcon className="h-6 w-6" />

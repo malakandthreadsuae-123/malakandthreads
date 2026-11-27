@@ -125,7 +125,7 @@ export function ProductPurchase({
           {busy === "add" ? "Adding…" : "Add to bag"}
         </button>
         <button type="button" onClick={() => toggleWishlist(product.id, product.name)} className="flex h-[50px] w-[50px] shrink-0 items-center justify-center border border-line bg-white hover:border-charcoal" aria-pressed={saved} aria-label={saved ? "Remove from wishlist" : "Save to wishlist"}>
-          <Heart className={cn("h-5 w-5", saved && "fill-danger text-danger")} />
+          <Heart className={cn("h-5 w-5", saved && "fill-charcoal text-charcoal")} />
         </button>
       </div>
       <button type="button" onClick={() => act("buy")} disabled={allOut || busy !== null || (variant !== null && stock <= 0)} className="btn-gold mt-3 w-full">
@@ -137,7 +137,7 @@ export function ProductPurchase({
         href={whatsappLink(settings.whatsappNumber, productInquiryMessage({ name: product.name, sku: variant?.sku ?? product.sku, url: productUrl, size, color, price: formatAED(price) }))}
         target="_blank"
         rel="noopener noreferrer"
-        className="mt-3 flex w-full items-center justify-center gap-2 border border-[#1f8f4e] py-3.5 text-[12px] font-medium uppercase tracking-[0.18em] text-[#1a7a43] transition hover:bg-[#1f8f4e] hover:text-white"
+        className="mt-3 flex w-full items-center justify-center gap-2 border border-charcoal py-3.5 text-[12px] font-medium uppercase tracking-[0.18em] text-charcoal transition hover:bg-charcoal hover:text-ivory"
       >
         <WhatsAppIcon className="h-4 w-4" /> Ask about this on WhatsApp
       </a>
@@ -160,7 +160,7 @@ export function ProductPurchase({
             tabIndex={showSticky ? 0 : -1}
             disabled={allOut || busy !== null}
             onClick={() => (needSize ? buyRef.current?.scrollIntoView({ behavior: "smooth", block: "center" }) : act("add"))}
-            className="btn-primary shrink-0 rounded-full px-6 py-3"
+            className="btn-primary shrink-0 rounded-none px-6 py-3"
           >
             {allOut ? "Sold out" : needSize ? "Choose size" : busy === "add" ? "Adding…" : "Add to bag"}
           </button>
