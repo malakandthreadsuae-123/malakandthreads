@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { deliveryNote } from "@/lib/delivery";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Heart, Truck, RotateCcw, ShieldCheck } from "lucide-react";
 import { useStore } from "@/components/providers/store";
@@ -64,7 +65,7 @@ export function ProductPurchase({
   return (
     <div>
       <Price price={price} regular={regular} size="lg" />
-      <p className="mt-1 text-[12px] text-muted">{settings.vatInclusive ? `Price includes ${settings.vatRatePercent}% VAT.` : `Excluding ${settings.vatRatePercent}% VAT.`} Delivery calculated at checkout.</p>
+      <p className="mt-1 text-[12px] text-muted">{settings.vatInclusive ? `Price includes ${settings.vatRatePercent}% VAT.` : `Excluding ${settings.vatRatePercent}% VAT.`} Delivery AED {settings.deliveryFee / 100} across the UAE (may vary by location).</p>
 
       {colors.length > 0 && (
         <fieldset className="mt-8">
@@ -143,7 +144,7 @@ export function ProductPurchase({
       </a>
 
       <ul className="mt-8 space-y-3 border-t border-line pt-6 text-[13px] text-charcoal/80">
-        <li className="flex items-center gap-3"><Truck className="h-4 w-4 text-gold-dark" aria-hidden /> Delivery to all seven emirates{settings.freeShippingThreshold > 0 ? ` · free over ${formatAED(settings.freeShippingThreshold)}` : ""}</li>
+        <li className="flex items-center gap-3"><Truck className="h-4 w-4 shrink-0 text-gold-dark" aria-hidden /> {deliveryNote(settings.deliveryFee)}</li>
         <li className="flex items-center gap-3"><ShieldCheck className="h-4 w-4 text-gold-dark" aria-hidden /> Cash on Delivery{settings.stripeEnabled ? " or secure card payment" : ""}</li>
         <li className="flex items-center gap-3"><RotateCcw className="h-4 w-4 text-gold-dark" aria-hidden /> Easy returns — see our returns policy</li>
       </ul>

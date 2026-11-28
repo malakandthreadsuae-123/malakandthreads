@@ -129,12 +129,12 @@ describe("cart & checkout API", () => {
     expect(jar.get("mt_cart")).toBeTruthy();
     const cart = (await body(await cartRoute.GET(jsonRequest("/api/cart?emirate=DUBAI"), ctx))).data as { totals: { subtotal: number; shippingFee: number } };
     expect(cart.totals.subtotal).toBe(24000);
-    expect(cart.totals.shippingFee).toBe(2500);
+    expect(cart.totals.shippingFee).toBe(1700);
     const res = await checkoutRoute.POST(jsonRequest("/api/checkout", "POST", { ...checkoutInput(), total: 1, subtotal: 1 }), ctx);
     expect(res.status).toBe(201);
     const { orderNumber } = (await body(res)).data as { orderNumber: string };
     const order = await prisma.order.findUniqueOrThrow({ where: { orderNumber } });
-    expect(order.total).toBe(26500); // client-sent totals ignored
+    expect(order.total).toBe(25700); // client-sent totals ignored
     const after = (await body(await cartRoute.GET(jsonRequest("/api/cart"), ctx))).data as { itemCount: number };
     expect(after.itemCount).toBe(0);
   });

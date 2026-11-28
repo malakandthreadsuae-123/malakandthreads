@@ -6,6 +6,7 @@ import { Minus, Plus, ShoppingBag, Trash2, Truck } from "lucide-react";
 import { Drawer } from "@/components/ui/drawer";
 import { useStore, type CartLine } from "@/components/providers/store";
 import { formatAED } from "@/lib/money";
+import { deliveryNote } from "@/lib/delivery";
 
 export function QuantityStepper({ value, onChange, max, label, small }: { value: number; onChange: (v: number) => void; max: number; label: string; small?: boolean }) {
   const btn = small ? "h-8 w-8" : "h-11 w-11";
@@ -78,7 +79,7 @@ export function FreeShippingMeter({ subtotal, threshold }: { subtotal: number; t
 }
 
 export function CartDrawer() {
-  const { cart, cartOpen, setCartOpen } = useStore();
+  const { cart, cartOpen, setCartOpen, settings } = useStore();
   const close = () => setCartOpen(false);
   const lines = cart?.lines ?? [];
   return (
@@ -95,6 +96,9 @@ export function CartDrawer() {
       ) : (
         <>
           <FreeShippingMeter subtotal={cart!.totals.subtotal - cart!.totals.discount} threshold={cart!.freeShippingThreshold} />
+          <p className="mx-6 mt-3 flex items-start gap-2 text-[12px] text-muted">
+            <Truck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-gold-dark" aria-hidden /> {deliveryNote(settings.deliveryFee)}
+          </p>
           <ul className="flex-1 divide-y divide-line overflow-y-auto px-6">
             {lines.map((l) => (
               <CartLineRow key={l.variantId} line={l} onClose={close} compact />

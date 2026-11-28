@@ -36,7 +36,7 @@ Production domain: **https://malakandtradesuae.com** (non-www is canonical; `www
 | hijab / scarves online UAE | `/category/scarves-hijabs` |
 | fashion bags UAE · handbags online UAE · crossbody bag | `/category/bags`, `/category/handbags`, `/category/crossbody-bags`, guide `/blog/fashion-bag-buying-guide` |
 | women's clothing online UAE · fashion shopping UAE | `/shop`, `/category/womens-clothing`, guide `/blog/online-fashion-shopping-tips-uae` |
-| Khaadi / Sapphire / Beechtree / Kayseria / Edenrobe / Alkaram Studio / Bonanza Satrangi / Zilbaji collection UAE | `/brands/khaadi`, `/brands/edenrobe`, `/brands/bonanza-satrangi`, … (indexable only once they contain products) |
+| Khaadi / Sapphire / Beechtree / Kayseria / Edenrobe / Alkaram Studio / Bonanza Satrangi / Zellbury collection UAE | `/brands/khaadi`, `/brands/edenrobe`, `/brands/bonanza-satrangi`, … (indexable only once they contain products) |
 | Eid outfits UAE · festive dresses | `/category/party-festive-wear`, `/category/seasonal-collections`, `/blog/eid-wardrobe-preparation` |
 | random shawl / surprise bag | `/category/random-collections` |
 

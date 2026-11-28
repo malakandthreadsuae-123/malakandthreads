@@ -133,6 +133,55 @@ export const contactSchema = z.object({
   website: z.string().max(0).optional(), // honeypot — must stay empty
 });
 
+const NO_LINKS = /(https?:\/\/|www\.|\.(com|net|org|ru|xyz|info|top|io))/i;
+
+/** Public "Write a review" form. Published straight away; admins can unpublish or delete any review. */
+export const feedbackSchema = z.object({
+  name: zName,
+  location: optStr(120),
+  email: zEmail.optional().or(z.literal("").transform(() => undefined)).transform((v) => v ?? null),
+  rating: z.coerce.number({ message: "Please choose a rating" }).int().min(1, "Please choose a rating").max(5),
+  text: z
+    .string()
+    .trim()
+    .min(10, "Please write a little more (at least 10 characters)")
+    .max(1000)
+    .refine((v) => !NO_LINKS.test(v), "Please remove links from your feedback"),
+  /** Photos the customer attached — only files uploaded through /api/feedback/upload. */
+  images: z
+    .array(z.string().regex(/^\/media\/\d{4}\/\d{2}\/[A-Za-z0-9_-]{8,40}\.webp$/, "Invalid photo"))
+    .max(4, "You can attach up to 4 photos")
+    .default([]),
+  consent: z.literal(true, { message: "Please allow us to show your feedback" }),
+  website: z.string().max(0).optional(), // honeypot — must stay empty
+});
+
+/** Admin create/edit of a feedback entry (Admin → Customer feedback). */
+export const feedbackAdminSchema = z
+  .object({
+    type: z.enum(["CUSTOMER_TEXT", "WHATSAPP_SCREENSHOT", "ADMIN_REVIEW", "SAMPLE"]),
+    name: z.string().trim().max(120).default(""),
+    location: optStr(120),
+    title: optStr(160),
+    text: z.string().trim().max(2000).default(""),
+    rating: z.union([z.coerce.number().int().min(1).max(5), z.literal("").transform(() => null), z.null()]).optional().transform((v) => v ?? null),
+    images: z.array(z.string().trim().max(500).refine((v) => v.startsWith("/") || /^https:\/\//i.test(v), "Invalid image URL")).max(10).default([]),
+    avatar: zUrlOrPath,
+    isVerifiedPurchase: z.boolean().default(false),
+    permissionConfirmed: z.boolean().default(false),
+    status: z.enum(["PENDING", "APPROVED", "REJECTED"]),
+    isActive: z.boolean().default(false),
+    sortOrder: z.coerce.number().int().min(-1000).max(1000).default(0),
+  })
+  .superRefine((d, ctx) => {
+    if (d.type === "WHATSAPP_SCREENSHOT" && !d.images.length) ctx.addIssue({ code: "custom", path: ["images"], message: "Upload at least one screenshot" });
+    if (d.type !== "WHATSAPP_SCREENSHOT" && d.text.length < 5 && !d.images.length) ctx.addIssue({ code: "custom", path: ["text"], message: "Write the feedback text (at least 5 characters)" });
+    if (d.type !== "WHATSAPP_SCREENSHOT" && !d.name) ctx.addIssue({ code: "custom", path: ["name"], message: "Enter the customer's name" });
+    if (d.isActive && d.status !== "APPROVED") ctx.addIssue({ code: "custom", path: ["isActive"], message: "Approve this feedback before publishing it" });
+    if (d.isActive && (d.type === "WHATSAPP_SCREENSHOT" || d.type === "ADMIN_REVIEW") && !d.permissionConfirmed)
+      ctx.addIssue({ code: "custom", path: ["permissionConfirmed"], message: "Confirm you have the customer's permission before publishing" });
+  });
+
 // ── admin: catalogue ──
 export const variantInputSchema = z.object({
   id: z.string().max(40).optional(),

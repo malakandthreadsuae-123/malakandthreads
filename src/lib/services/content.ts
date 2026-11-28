@@ -40,7 +40,3 @@ export async function getRecentPosts(take = 3, excludeId?: string) {
     take,
   });
 }
-
-export async function getTestimonials() {
-  return prisma.testimonial.findMany({ where: { isActive: true }, orderBy: { sortOrder: "asc" }, take: 6 });
-}

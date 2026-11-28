@@ -748,16 +748,42 @@ model HomepageSection {
   updatedAt DateTime @updatedAt
 }
 
-/// Admin-entered testimonials. Only publish genuine customer feedback with consent.
+/// Where a customer feedback entry came from.
+enum FeedbackType {
+  CUSTOMER_TEXT // written by a customer through the website form
+  WHATSAPP_SCREENSHOT // screenshot(s) of genuine feedback a customer sent on WhatsApp, uploaded by an admin
+  ADMIN_REVIEW // genuine feedback typed in by an admin (e.g. received by phone or in person)
+  SAMPLE // demo content — always labelled "Sample" on the website and excluded from counts and ratings
+}
+
+/// Customer feedback & reviews shown in the homepage "Customer Feedback" section (Admin → Customer feedback).
+/// Public only when status = APPROVED and isActive (published) = true. Never invent or edit genuine feedback.
 model Testimonial {
-  id        String   @id @default(cuid())
-  name      String   @db.VarChar(120)
-  location  String?  @db.VarChar(120)
-  text      String   @db.Text
-  rating    Int?
-  isActive  Boolean  @default(true)
-  sortOrder Int      @default(0)
-  createdAt DateTime @default(now())
+  id                  String       @id @default(cuid())
+  name                String       @db.VarChar(120)
+  location            String?      @db.VarChar(120)
+  /// Private — never sent to the public website.
+  email               String?      @db.VarChar(191)
+  title               String?      @db.VarChar(160)
+  text                String       @db.Text
+  rating              Int?
+  type                FeedbackType @default(ADMIN_REVIEW)
+  status              ReviewStatus @default(APPROVED)
+  /// Published on the website (only possible once APPROVED).
+  isActive            Boolean      @default(true)
+  /// Screenshot URLs (string[]) — WhatsApp feedback etc.
+  images              Json?
+  avatar              String?      @db.VarChar(500)
+  /// Only true when a purchase was actually confirmed (delivered order, or confirmed by an admin).
+  isVerifiedPurchase  Boolean      @default(false)
+  /// Customer agreed to publication (website form) / admin confirmed permission to share (screenshots, admin reviews).
+  permissionConfirmed Boolean      @default(false)
+  sortOrder           Int          @default(0)
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @default(now()) @updatedAt
+
+  @@index([status, isActive, createdAt])
+  @@index([type])
 }
 
 model WebsiteSetting {

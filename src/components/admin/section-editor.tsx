@@ -22,7 +22,7 @@ const HELP: Record<string, string> = {
   promo_banners: "Shows active Promotional banners.",
   seasonal: "Shows active Seasonal banners.",
   brands: "Shows brands marked 'Show on homepage'.",
-  testimonials: "Shows active testimonials (hidden when none exist).",
+  testimonials: "Customer feedback: feedback customers post (shown straight away) and feedback/screenshots added in Admin → Customer feedback.",
   gallery: "Up to 6 lifestyle images (links to Instagram when set in Settings).",
   whatsapp: "Uses the WhatsApp number and Channel URL from Settings.",
 };

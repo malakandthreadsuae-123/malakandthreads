@@ -39,8 +39,8 @@ export function ProductsTable({ rows, canWrite, canDelete }: { rows: Row[]; canW
           <span className="text-muted">{sel.length} selected</span>
           <select aria-label="Bulk action" disabled={!sel.length || busy} defaultValue="" onChange={(e) => { void bulk(e.target.value); e.target.value = ""; }} className="rounded border border-line bg-white px-3 py-2">
             <option value="" disabled>Bulk action…</option>
-            <option value="publish">Publish</option>
-            <option value="unpublish">Unpublish (inactive)</option>
+            <option value="publish">Set live on store</option>
+            <option value="unpublish">Hide from store</option>
             <option value="draft">Move to draft</option>
             <option value="feature">Mark featured</option>
             <option value="unfeature">Remove featured</option>

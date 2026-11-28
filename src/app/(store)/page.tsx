@@ -4,18 +4,24 @@ import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { prisma } from "@/lib/db";
 import { getSettings } from "@/lib/settings";
-import { getBanners, getHomepageSections, getRecentPosts, getTestimonials } from "@/lib/services/content";
-import { getProductsByFlag, getProductsInCategory } from "@/lib/services/catalog";
+import { getBanners, getHomepageSections, getPage, getRecentPosts } from "@/lib/services/content";
+import { renderMarkdown } from "@/lib/markdown";
+import { whatsappLink } from "@/lib/whatsapp";
+import { getBrandCards, getProductsByFlag, getProductsInCategory } from "@/lib/services/catalog";
 import { buildMetadata, organizationLd, websiteLd } from "@/lib/seo";
 import { formatDate } from "@/lib/utils";
 import { Hero, type HeroData } from "@/components/store/hero";
 import { ProductCarousel } from "@/components/store/product-carousel";
 import { Reveal } from "@/components/ui/reveal";
 import { JsonLd, SectionHeading } from "@/components/ui/primitives";
-import { Gallery, NewsletterBand, PromoBanners, SeasonalSplit, ServicePromise, Testimonials, WhatsAppBand } from "@/components/store/home-sections";
+import { Gallery, NewsletterBand, PromoBanners, SeasonalSplit, ServicePromise, WhatsAppBand } from "@/components/store/home-sections";
 import { CategoryCircles, ProductTabs } from "@/components/store/home-extra";
-import { BrandGrid, CategorySpotlight, ShopByPrice, TrustStrip } from "@/components/store/home-editorial";
+import { CategorySpotlight, ShopByPrice, TrustStrip } from "@/components/store/home-editorial";
+import { BrandWall } from "@/components/store/brand-wall";
 import { VideoStory } from "@/components/store/video-story";
+import { FaqSection } from "@/components/store/faq-section";
+import { CustomerFeedback } from "@/components/store/customer-feedback";
+import { getFeedbackStats, getPublishedFeedback } from "@/lib/services/feedback";
 
 export const dynamic = "force-dynamic";
 
@@ -38,7 +44,7 @@ const FALLBACK_HERO: HeroData = {
   cta2Href: "/collections",
 };
 
-type Cfg = { limit?: number; category?: string; slugs?: string[]; images?: string[]; video?: string; poster?: string; href?: string; cta?: string };
+type Cfg = { limit?: number; category?: string; slugs?: string[]; labels?: Record<string, string>; images?: string[]; video?: string; poster?: string; href?: string; cta?: string };
 
 export default async function HomePage() {
   const [settings, sections, heroBanners] = await Promise.all([getSettings(), getHomepageSections(), getBanners("HERO")]);
@@ -59,7 +65,7 @@ export default async function HomePage() {
             select: { name: true, slug: true, image: true },
           });
           const ordered = slugs.length ? slugs.map((sl) => cats.find((c) => c.slug === sl)).filter((c): c is (typeof cats)[number] => Boolean(c)) : cats;
-          return ordered.length ? <CategoryCircles key={s.key} items={ordered.map((c) => ({ ...c, name: c.name.replace(/^Women's /, "") }))} /> : null;
+          return ordered.length ? <CategoryCircles key={s.key} items={ordered.map((c) => ({ ...c, name: cfg.labels?.[c.slug] ?? c.name.replace(/^Women's /, "") }))} /> : null;
         }
         case "trust_strip":
           return <TrustStrip key={s.key} freeThreshold={settings.freeShippingThreshold} returnsDays={settings.returnsWindowDays} cod={settings.codEnabled} />;
@@ -115,11 +121,13 @@ export default async function HomePage() {
         case "seasonal":
           return <SeasonalSplit key={s.key} title={s.title} banners={await getBanners("SEASONAL")} />;
         case "brands": {
-          const brands = await prisma.brand.findMany({ where: { isActive: true, isFeatured: true }, select: { name: true, slug: true, logo: true }, orderBy: [{ sortOrder: "asc" }, { name: "asc" }], take: 8 });
-          return <BrandGrid key={s.key} title={s.title} subtitle={s.subtitle} brands={brands} />;
+          const brands = await getBrandCards({ featuredOnly: true, take: 8 });
+          return <BrandWall key={s.key} title={s.title} subtitle={s.subtitle} brands={brands} />;
         }
-        case "testimonials":
-          return <Testimonials key={s.key} title={s.title} items={await getTestimonials()} />;
+        case "testimonials": {
+          const [{ items, hasMore }, stats] = await Promise.all([getPublishedFeedback(1), getFeedbackStats()]);
+          return <CustomerFeedback key={s.key} title={s.title} subtitle={s.subtitle} initial={items} hasMore={hasMore} stats={stats} />;
+        }
         case "gallery":
           return <Gallery key={s.key} title={s.title} subtitle={s.subtitle} images={cfg.images ?? []} instagramUrl={settings.social.instagram || undefined} />;
         case "whatsapp":
@@ -128,6 +136,20 @@ export default async function HomePage() {
           return <NewsletterBand key={s.key} title={s.title} subtitle={s.subtitle} />;
         case "trust":
           return <ServicePromise key={s.key} />;
+        case "faq": {
+          // Questions come from the FAQ page (Admin → Content → FAQ): each "## Question" heading + its answer.
+          const page = await getPage("faq");
+          const items = (page?.content ?? "")
+            .split(/^##\s+/m)
+            .slice(1)
+            .map((block) => {
+              const [q, ...rest] = block.split("\n");
+              return { question: q.trim(), answerHtml: renderMarkdown(rest.join("\n").trim()) };
+            })
+            .filter((f) => f.question && f.answerHtml)
+            .slice(0, cfg.limit ?? 6);
+          return <FaqSection key={s.key} title={s.title} subtitle={s.subtitle} items={items} whatsappUrl={settings.whatsappNumber ? whatsappLink(settings.whatsappNumber, "Hi! I have a question about MALAKAND THREADS.") : undefined} />;
+        }
         default:
           return null;
       }

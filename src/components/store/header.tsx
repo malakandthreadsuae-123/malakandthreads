@@ -13,6 +13,7 @@ import { whatsappLink } from "@/lib/whatsapp";
 import { SearchOverlay } from "./search-overlay";
 import { MobileMenu } from "./mobile-menu";
 import { cn } from "@/lib/utils";
+import { deliveryNote } from "@/lib/delivery";
 
 export type MenuCategory = { id: string; name: string; slug: string; image: string | null; children: { name: string; slug: string }[] };
 export type MenuBrand = { name: string; slug: string };
@@ -93,7 +94,7 @@ export function Header({ categories, brands }: { categories: MenuCategory[]; bra
   const messages = settings.announcement
     ? settings.announcement.split(/\s+[·|•]\s+/).filter(Boolean)
     : [
-        settings.freeShippingThreshold > 0 ? `Free UAE delivery over AED ${Math.round(settings.freeShippingThreshold / 100)}` : "Delivery to all seven emirates",
+        deliveryNote(settings.deliveryFee),
         settings.codEnabled ? "Cash on Delivery across the UAE" : "Secure online payment",
         "Pakistani designer labels, styled for the UAE",
       ];

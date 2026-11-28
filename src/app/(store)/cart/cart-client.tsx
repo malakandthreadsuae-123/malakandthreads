@@ -3,12 +3,13 @@
 import Link from "next/link";
 import { ShoppingBag, Lock } from "lucide-react";
 import { useStore } from "@/components/providers/store";
+import { deliveryNote } from "@/lib/delivery";
 import { CartLineRow, FreeShippingMeter } from "@/components/store/cart-drawer";
 import { CouponBox, TotalsTable } from "@/components/store/order-summary";
 import { EmptyState } from "@/components/ui/primitives";
 
 export function CartPageClient() {
-  const { cart } = useStore();
+  const { cart, settings } = useStore();
   if (!cart)
     return (
       <div className="container-luxe py-16" aria-busy="true">
@@ -40,7 +41,7 @@ export function CartPageClient() {
           <div className="mt-4">
             <TotalsTable cart={cart} showShipping={false} />
           </div>
-          <p className="mt-2 text-[12px] text-muted">Delivery fee for your emirate is calculated at checkout.</p>
+          <p className="mt-2 text-[12px] text-muted">{deliveryNote(settings.deliveryFee)}. The exact fee for your emirate is shown at checkout.</p>
           {cart.hasProblems && <p className="mt-4 text-[13px] text-danger" role="alert">Some items are unavailable. Please update your bag to continue.</p>}
           <Link href="/checkout" className={`btn-primary mt-6 w-full ${cart.hasProblems ? "pointer-events-none opacity-50" : ""}`} aria-disabled={cart.hasProblems}>
             <Lock className="h-4 w-4" aria-hidden /> Secure checkout

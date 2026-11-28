@@ -123,14 +123,14 @@ From structured top-handle bags for the office to hands-free crossbody bags for 
 ];
 
 const BRANDS = [
-  { name: "Khaadi", slug: "khaadi" },
-  { name: "Beechtree", slug: "beechtree" },
-  { name: "Sapphire", slug: "sapphire" },
-  { name: "Kayseria", slug: "kayseria" },
-  { name: "Zilbaji", slug: "zilbaji" },
-  { name: "Edenrobe", slug: "edenrobe" },
-  { name: "Alkaram Studio", slug: "alkaram-studio" },
-  { name: "Bonanza Satrangi", slug: "bonanza-satrangi" },
+  { name: "Khaadi", slug: "khaadi", image: "/images/demo/dress-05.webp" },
+  { name: "Beechtree", slug: "beechtree", image: "/images/demo/dress-03.webp" },
+  { name: "Sapphire", slug: "sapphire", image: "/images/demo/dress-08.webp" },
+  { name: "Kayseria", slug: "kayseria", image: "/images/demo/dress-07.webp" },
+  { name: "Zellbury", slug: "zellbury", image: "/images/demo/shawl-07.webp" },
+  { name: "Edenrobe", slug: "edenrobe", image: "/images/demo/dress-10.webp" },
+  { name: "Alkaram Studio", slug: "alkaram-studio", image: "/images/demo/dress-09.webp" },
+  { name: "Bonanza Satrangi", slug: "bonanza-satrangi", image: "/images/demo/shawl-04.webp" },
 ];
 
 // ───────────── Demo products ─────────────
@@ -190,19 +190,20 @@ const PRODUCTS: DemoProduct[] = [
 
 const HOMEPAGE_SECTIONS: { key: string; title: string; subtitle?: string; sortOrder: number; isEnabled?: boolean; config?: object }[] = [
   { key: "hero", title: "Hero", sortOrder: 0 },
-  { key: "categories", title: "Shop by Category", sortOrder: 2, config: { slugs: ["womens-dresses", "abayas-kaftans", "party-festive-wear", "maxi-dresses", "shawls", "scarves-hijabs", "bags", "handbags", "random-collections", "seasonal-collections"] } },
-  { key: "trust_strip", title: "Why shop with us", sortOrder: 1, isEnabled: false },
+  { key: "categories", title: "Shop by Category", sortOrder: 2, config: { slugs: ["bags", "womens-dresses", "shawls", "random-collections"], labels: { "womens-dresses": "Girl Dress", "random-collections": "Random Collection" } } },
+  { key: "trust_strip", title: "Why shop with us", sortOrder: 40, isEnabled: false },
   { key: "product_tabs", title: "Shop the Latest", subtitle: "New arrivals, customer favourites and what's trending now", sortOrder: 3, config: { limit: 8 } },
   { key: "video_story", title: "The Embroidered Edit", subtitle: "Hand-finished embroidery, soft drape and heirloom detail — pieces made to be noticed.", sortOrder: 5, config: { video: "/videos/story-embroidered.mp4", poster: "/images/story-embroidered.webp", href: "/category/womens-clothing", cta: "Discover the edit" } },
   { key: "promo_banners", title: "Promotions", sortOrder: 30, isEnabled: false },
   { key: "dresses", title: "Women's Dresses", subtitle: "Maxi, festive and everyday dresses", sortOrder: 4, config: { category: "womens-dresses" } },
   { key: "shop_by_price", title: "Shop by Budget", sortOrder: 31, isEnabled: false },
   { key: "shawls", title: "Premium Shawls", subtitle: "Soft layers for cool evenings", sortOrder: 6, config: { category: "shawls" } },
-  { key: "brands", title: "Brand Collections", subtitle: "Explore collections by label", sortOrder: 7 },
+  { key: "brands", title: "Brand Collections", subtitle: "Explore collections by label", sortOrder: 1 },
   { key: "bags", title: "Fashion Bags", subtitle: "From desk to dinner", sortOrder: 8, config: { category: "bags" } },
   { key: "seasonal", title: "Seasonal Collections", sortOrder: 32, isEnabled: false },
   { key: "featured", title: "Featured Pieces", subtitle: "Hand-picked by our stylists", sortOrder: 33, isEnabled: false, config: { limit: 8 } },
-  { key: "testimonials", title: "What Our Customers Say", sortOrder: 9 },
+  { key: "testimonials", title: "Customer Feedback", subtitle: "Real words from our customers — on the website and on WhatsApp.", sortOrder: 11 },
+  { key: "faq", title: "Frequently Asked Questions", subtitle: "Delivery, payment, wholesale and more — quick answers to what customers ask us most.", sortOrder: 10, config: { limit: 6 } },
   { key: "gallery", title: "Style Inspiration", subtitle: "Follow us for daily styling ideas", sortOrder: 34, isEnabled: false, config: { images: ["/images/demo/dress-09.webp", "/images/demo/shawl-07.webp", "/images/demo/bag-02.webp", "/images/demo/dress-03.webp", "/images/demo/editorial-04.webp", "/images/demo/shawl-06.webp"] } },
   { key: "whatsapp", title: "Shop with WhatsApp", subtitle: "Personal styling help, sizing advice and order support — just message us.", sortOrder: 35, isEnabled: false },
   // The footer already carries a newsletter sign-up, so this band is off by default.
@@ -271,6 +272,7 @@ async function main() {
       create: {
         name: b.name,
         slug: b.slug,
+        image: b.image, // licensed Unsplash stand-in (docs/MEDIA_CREDITS.md) — replace in Admin → Brands
         sortOrder: i,
         isFeatured: true,
         description: `Browse ${b.name} label pieces available from MALAKAND THREADS in the UAE. MALAKAND THREADS is an independent retailer and is not an official ${b.name} store or authorised distributor unless stated on the product page.`,
@@ -354,6 +356,16 @@ async function main() {
       where: { key: s.key },
       create: { key: s.key, title: s.title, subtitle: s.subtitle, sortOrder: s.sortOrder, isEnabled: s.isEnabled ?? true, config: s.config },
       update: {},
+    });
+  }
+  // SAMPLE feedback: labelled "Sample review" on the website, excluded from counts/ratings, removable in Admin → Customer feedback → Samples.
+  if ((await prisma.testimonial.count()) === 0) {
+    await prisma.testimonial.createMany({
+      data: [
+        { id: "fb_sample_1", name: "Ayesha K.", location: "Dubai", title: "Beautiful shawl", text: "The embroidered shawl is soft and warm, and the colours look even richer in person. Neatly packed too.", rating: 5, sortOrder: 90 },
+        { id: "fb_sample_2", name: "Mariam S.", location: "Sharjah", title: "Lovely stitching", text: "Lovely stitching on my dress and the fit was just right. I will definitely order again.", rating: 5, sortOrder: 91 },
+        { id: "fb_sample_3", name: "Fatima R.", location: "Abu Dhabi", title: "Helpful service", text: "They answered my sizing questions on WhatsApp quickly before I ordered. Very helpful.", rating: 4, sortOrder: 92 },
+      ].map((t) => ({ ...t, type: "SAMPLE" as const, status: "APPROVED" as const, isActive: true, permissionConfirmed: true })),
     });
   }
   if ((await prisma.banner.count()) === 0) {

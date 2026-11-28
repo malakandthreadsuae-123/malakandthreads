@@ -18,10 +18,14 @@ export const PAGES: {
     title: "About MALAKAND THREADS",
     seoTitle: "About Us – Premium Women's Fashion in the UAE",
     seoDescription:
-      "MALAKAND THREADS is a UAE online fashion store offering curated women's dresses, shawls and fashion bags with Cash on Delivery across all seven emirates.",
+      "MALAKAND THREADS is a women-owned UAE fashion brand, founded in 2025, offering curated women's dresses, shawls and fashion bags with Cash on Delivery across all seven emirates.",
     needsReview: true,
     showInFooter: true,
     content: `MALAKAND THREADS is an online fashion boutique serving customers across the United Arab Emirates. We bring together elegant women's dresses, soft premium shawls and everyday-to-evening fashion bags in one considered collection.
+
+## Our story
+
+Founded in the UAE in 2025, MALAKAND THREADS is a solely women-owned brand for women customers — created to fulfil their daily clothing needs according to their own fashion and style.
 
 ## What we stand for
 
@@ -35,9 +39,7 @@ Have a question before you order? Message us on WhatsApp at +971 55 991 2484 or 
 
 ## A note on brands
 
-Some collections on our website are organised by the label of the garment (for example Khaadi, Sapphire or Beechtree style collections). MALAKAND THREADS is an independent retailer. Unless a product page clearly states otherwise, we are not an official partner, distributor or authorised reseller of these brands, and brand names are used only to describe the products.
-
-[Business owner: add your story, founding year and any verified trade licence details here before launch.]`,
+Some collections on our website are organised by the label of the garment (for example Khaadi, Sapphire or Beechtree style collections). MALAKAND THREADS is an independent retailer. Unless a product page clearly states otherwise, we are not an official partner, distributor or authorised reseller of these brands, and brand names are used only to describe the products.`,
   },
   {
     slug: "privacy-policy",
@@ -83,8 +85,7 @@ See our [Cookie Policy](/cookie-policy).
 
 ## Contact
 
-MALAKAND THREADS · malakantradesuae@gmail.com · +971 55 991 2484
-[Business owner: add your registered business name and address once confirmed.]`,
+MALAKAND THREADS · malakantradesuae@gmail.com · +971 55 991 2484`,
   },
   {
     slug: "terms-and-conditions",
@@ -99,7 +100,7 @@ By using this website and placing an order you agree to these terms. Please read
 
 ## About us
 
-This website is operated by MALAKAND THREADS. [Business owner: insert legal entity name, trade licence number and issuing authority once confirmed.]
+This website is operated by MALAKAND THREADS, a women-owned business founded in the UAE in 2025.
 
 ## Products and pricing
 
@@ -130,24 +131,24 @@ Brand names appearing on this website belong to their respective owners and are 
 
 ## Governing law
 
-These terms are governed by the laws of the United Arab Emirates. [Business owner: confirm the emirate whose courts have jurisdiction.]`,
+These terms are governed by the laws of the United Arab Emirates.`,
   },
   {
     slug: "shipping-policy",
     title: "Shipping & Delivery Policy",
     seoTitle: "Shipping & Delivery Policy – UAE Delivery",
-    seoDescription: "Delivery fees, free delivery threshold and how we deliver MALAKAND THREADS orders across all seven UAE emirates.",
+    seoDescription: "Delivery charges are AED 17 across the UAE (may vary by location). How we deliver MALAKAND THREADS orders to all seven emirates.",
     needsReview: true,
     showInFooter: true,
     content: `We deliver to all seven emirates: Abu Dhabi, Dubai, Sharjah, Ajman, Umm Al Quwain, Ras Al Khaimah and Fujairah.
 
 ## Delivery fees
 
-The delivery fee for your emirate is shown at checkout before you place your order. Orders above the free-delivery threshold shown on the website qualify for free delivery.
+Delivery charges are **AED 17** across the UAE (charges may vary according to your location). The exact delivery fee is always shown at checkout before you place your order.
 
 ## Delivery times
 
-Orders are usually dispatched after confirmation. Delivery time depends on your emirate and our courier partner. [Business owner: confirm typical dispatch and delivery times before publishing specific timeframes.]
+Orders are usually dispatched after confirmation. Delivery time depends on your emirate and our courier partner.
 
 ## Order tracking
 
@@ -172,7 +173,7 @@ If the courier cannot reach you after reasonable attempts, the order may be retu
 
 ## Return window
 
-You may request a return within **[7] days** of delivery. [Business owner: confirm the return window — this number must match the "Returns window" setting in the admin panel.]
+You may request a return within **7 days** of delivery.
 
 ## Conditions
 
@@ -250,7 +251,27 @@ Use the "Cookie settings" link in the footer at any time to change your choice, 
     showInFooter: true,
     content: `## Do you deliver to all emirates?
 
-Yes — we deliver to Abu Dhabi, Dubai, Sharjah, Ajman, Umm Al Quwain, Ras Al Khaimah and Fujairah. The delivery fee for your emirate is shown at checkout.
+Yes — we deliver to Abu Dhabi, Dubai, Sharjah, Ajman, Umm Al Quwain, Ras Al Khaimah and Fujairah. Delivery charges 17 dirham across UAE (charges may vary according to your location).
+
+## How much is delivery?
+
+Delivery is AED 17 across the UAE. Charges may vary according to your location — the exact fee is always shown at checkout before you place your order.
+
+## Do you deliver outside the UAE?
+
+Yes, we accept international deliveries across the globe. Message us on WhatsApp with your country and the items you would like, and we will confirm the delivery charges for you.
+
+## Do you sell wholesale?
+
+Yes. Kindly [contact us](/contact) or message us on WhatsApp for bulk and wholesale orders.
+
+## Can I get help with my order on WhatsApp?
+
+Yes. Tap the WhatsApp button on any page and send us the product name or link — our team can help with sizes, colours and placing your order.
+
+## Can I change or cancel my order?
+
+Contact us as soon as possible with your order number. If your order has not been dispatched yet we will do our best to change or cancel it. See our [Cancellation Policy](/cancellation-policy) for details.
 
 ## Can I pay cash on delivery?
 

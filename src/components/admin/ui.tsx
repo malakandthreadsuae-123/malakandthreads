@@ -66,7 +66,7 @@ const STATUS_TONE: Record<string, string> = {
 };
 
 export function StatusBadge({ status }: { status: string }) {
-  const label = ORDER_STATUS_LABELS[status as OrderStatusValue] ?? PAYMENT_STATUS_LABELS[status] ?? status.charAt(0) + status.slice(1).toLowerCase().replace(/_/g, " ");
+  const label = ORDER_STATUS_LABELS[status as OrderStatusValue] ?? PAYMENT_STATUS_LABELS[status] ?? ({ ACTIVE: "Live", INACTIVE: "Hidden" } as Record<string, string>)[status] ?? status.charAt(0) + status.slice(1).toLowerCase().replace(/_/g, " ");
   return <span className={cn("inline-flex whitespace-nowrap rounded px-2 py-0.5 text-[11px] font-medium", STATUS_TONE[status] ?? "bg-sand text-charcoal")}>{label}</span>;
 }
 

@@ -17,14 +17,14 @@ describe("order creation", () => {
     const v = p.variants[0];
     const order = await createOrder({ input: checkoutInput(), items: [{ variantId: v.id, quantity: 2 }], userId: null, ip: "1.1.1.1" });
     expect(order.subtotal).toBe(30000);
-    expect(order.shippingFee).toBe(0); // 300 AED meets the default free threshold
-    expect(order.total).toBe(30000);
-    expect(order.vatAmount).toBe(Math.round(30000 - 30000 / 1.05));
+    expect(order.shippingFee).toBe(1700); // AED 17 delivery across the UAE, no free-delivery threshold
+    expect(order.total).toBe(31700);
+    expect(order.vatAmount).toBe(Math.round(31700 - 31700 / 1.05));
     expect(order.orderNumber).toMatch(/^MT-\d{6}-[A-Z2-9]{5}$/);
     expect(await stockOf(v.id)).toBe(3);
     const full = await prisma.order.findUniqueOrThrow({ where: { id: order.id }, include: { items: true, payments: true, history: true } });
     expect(full.items[0]).toMatchObject({ quantity: 2, unitPrice: 15000, lineTotal: 30000, sku: v.sku });
-    expect(full.payments[0]).toMatchObject({ provider: "COD", status: "UNPAID", amount: 30000 });
+    expect(full.payments[0]).toMatchObject({ provider: "COD", status: "UNPAID", amount: 31700 });
     expect(full.history[0].status).toBe("PENDING");
     const tx = await prisma.inventoryTransaction.findFirstOrThrow({ where: { orderId: order.id } });
     expect(tx).toMatchObject({ change: -2, stockAfter: 3, reason: "ORDER" });
@@ -33,8 +33,8 @@ describe("order creation", () => {
   it("charges emirate-specific delivery below the free threshold", async () => {
     const p = await makeProduct({ price: 5000, stock: 5 });
     const order = await createOrder({ input: checkoutInput({ emirate: "FUJAIRAH" }), items: [{ variantId: p.variants[0].id, quantity: 1 }], userId: null, ip: null });
-    expect(order.shippingFee).toBe(3000);
-    expect(order.total).toBe(8000);
+    expect(order.shippingFee).toBe(1700);
+    expect(order.total).toBe(6700);
   });
 
   it("rejects orders exceeding stock and leaves stock untouched", async () => {

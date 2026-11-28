@@ -38,7 +38,7 @@ test("admin can sign in, see the dashboard, manage orders and products", async (
   await page.goto("/admin/products?q=MT-AB-002");
   await page.getByRole("link", { name: "Beige Embroidered Abaya" }).click();
   await expect(page.getByLabel("Product name *")).toHaveValue("Beige Embroidered Abaya");
-  await expect(page.getByText("Google preview")).toBeVisible();
+  await expect(page.getByLabel("Visibility")).toHaveValue("ACTIVE");
 
   // Settings page loads (super admin)
   await page.goto("/admin/settings");

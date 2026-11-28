@@ -3,14 +3,14 @@ import Image from "next/image";
 import { ArrowRight, Banknote, MessageCircle, RotateCcw, Truck } from "lucide-react";
 import { Reveal } from "@/components/ui/reveal";
 import { ProductCard } from "./product-card";
-import type { ProductCard as Card } from "@/lib/services/catalog";
+import type { BrandCardData, ProductCard as Card } from "@/lib/services/catalog";
 import { formatAED } from "@/lib/money";
 import { cn } from "@/lib/utils";
 
 /** Compact trust strip directly under the hero — answers "can I trust / how do I pay" instantly. */
 export function TrustStrip({ freeThreshold, returnsDays, cod }: { freeThreshold: number; returnsDays: number; cod: boolean }) {
   const items = [
-    { Icon: Truck, title: freeThreshold > 0 ? `Free delivery over ${formatAED(freeThreshold).replace(".00", "")}` : "Delivery across the UAE", text: "All seven emirates" },
+    { Icon: Truck, title: freeThreshold > 0 ? `Free delivery over ${formatAED(freeThreshold).replace(".00", "")}` : "AED 17 delivery across the UAE", text: "Charges may vary according to your location" },
     { Icon: Banknote, title: cod ? "Cash on Delivery" : "Secure payment", text: "Or pay by card" },
     { Icon: RotateCcw, title: `${returnsDays}-day returns`, text: "Simple & hassle-free" },
     { Icon: MessageCircle, title: "WhatsApp styling help", text: "Real people, quick replies" },
@@ -102,48 +102,42 @@ export function ShopByPrice({ title }: { title: string }) {
   );
 }
 
-/** Brand grid with monogram cards. */
-export function BrandGrid({ title, subtitle, brands }: { title: string; subtitle?: string | null; brands: { name: string; slug: string; logo: string | null }[] }) {
-  if (!brands.length) return null;
+/** One brand: photo (uploaded brand image or a product photo), logo, or a lettered tile as fallback. */
+export function BrandCard({ brand, sizes = "(max-width: 768px) 50vw, 25vw" }: { brand: BrandCardData; sizes?: string }) {
   return (
-    <section className="bg-charcoal py-20 text-ivory sm:py-24" aria-label={title}>
-      <div className="container-luxe">
-        <Reveal className="mb-12 flex flex-col items-center text-center">
-          <p className="mb-4 flex items-center gap-4 text-[11px] font-medium uppercase tracking-[0.34em] text-gold">
-            <span aria-hidden className="h-px w-8 bg-gold/70" />
-            Labels we love
-            <span aria-hidden className="h-px w-8 bg-gold/70" />
-          </p>
-          <h2 className="text-[34px] leading-[1.1] sm:text-[46px]">{title}</h2>
-          {subtitle && <p className="mt-4 max-w-xl text-[15px] text-ivory/65">{subtitle}</p>}
-        </Reveal>
-        <ul className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
-          {brands.map((b, i) => (
-            <li key={b.slug}>
-              <Reveal delay={(i % 4) * 0.06}>
-                <Link
-                  href={`/brands/${b.slug}`}
-                  className="group relative flex h-28 flex-col items-center justify-center gap-2 overflow-hidden border border-white/12 px-3 text-center transition-colors duration-500 hover:border-gold sm:h-36"
-                >
-                  <span aria-hidden className="absolute inset-x-6 top-0 h-px origin-center scale-x-0 bg-gradient-to-r from-transparent via-gold to-transparent transition-transform duration-700 group-hover:scale-x-100" />
-                  {b.logo ? (
-                    <Image src={b.logo} alt={b.name} width={140} height={56} className="max-h-12 w-auto object-contain brightness-0 invert" />
-                  ) : (
-                    <span className="font-serif text-[22px] tracking-[0.06em] sm:text-[28px]">{b.name}</span>
-                  )}
-                  <span className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.26em] text-ivory/50 transition-colors duration-300 group-hover:text-gold">
-                    Shop collection <ArrowRight className="h-3 w-3 -translate-x-1 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100" aria-hidden />
-                  </span>
-                </Link>
-              </Reveal>
-            </li>
-          ))}
-        </ul>
-        <div className="mt-12 flex flex-col items-center gap-5">
-          <Link href="/brands" className="btn-outline-light">View all brands</Link>
-          <p className="max-w-2xl text-center text-[12px] text-ivory/45">MALAKAND THREADS is an independent retailer. Brand names describe the products offered and do not imply official partnership.</p>
-        </div>
-      </div>
-    </section>
+    <Link href={`/brands/${brand.slug}`} className="group block">
+      <span className="relative block aspect-[4/5] overflow-hidden bg-charcoal">
+        {brand.cover ? (
+          <>
+            <Image src={brand.cover} alt={`${brand.name} collection`} fill sizes={sizes} className="object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105" />
+            <span className="absolute inset-0 bg-gradient-to-t from-ink/60 via-transparent to-transparent" aria-hidden />
+          </>
+        ) : brand.logo ? (
+          <span className="absolute inset-0 flex items-center justify-center bg-white p-8">
+            <Image src={brand.logo} alt={brand.name} width={220} height={110} className="max-h-24 w-auto object-contain" />
+          </span>
+        ) : (
+          <span className="absolute inset-0 flex flex-col items-center justify-center gap-4" aria-hidden>
+            <span className="font-serif text-[96px] leading-none text-gold/80 transition-transform duration-700 group-hover:scale-110">{brand.name.charAt(0)}</span>
+            <span className="h-px w-10 bg-gold/50" />
+          </span>
+        )}
+        {brand.cover && brand.logo && (
+          <span className="absolute bottom-3 left-3 rounded-sm bg-white/95 px-3 py-2">
+            <Image src={brand.logo} alt="" width={90} height={36} className="max-h-7 w-auto object-contain" />
+          </span>
+        )}
+        <span className="absolute inset-x-0 bottom-0 h-0.5 origin-left scale-x-0 bg-gold transition-transform duration-500 group-hover:scale-x-100" aria-hidden />
+      </span>
+      <span className="mt-4 flex items-center justify-between gap-3">
+        <span>
+          <span className="block font-serif text-[21px] leading-tight transition-colors group-hover:text-gold-dark">{brand.name}</span>
+          <span className="mt-1 block text-[11px] uppercase tracking-[0.2em] text-muted">{brand.count > 0 ? `${brand.count} ${brand.count === 1 ? "piece" : "pieces"}` : "Coming soon"}</span>
+        </span>
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-line transition-colors group-hover:border-charcoal group-hover:bg-charcoal group-hover:text-ivory">
+          <ArrowRight className="h-4 w-4" aria-hidden />
+        </span>
+      </span>
+    </Link>
   );
 }

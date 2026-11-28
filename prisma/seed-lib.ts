@@ -25,13 +25,13 @@ export async function seedRoles(prisma: PrismaClient) {
 }
 
 export const EMIRATE_RATES = [
-  { emirate: "ABU_DHABI", fee: 2500 },
-  { emirate: "DUBAI", fee: 2500 },
-  { emirate: "SHARJAH", fee: 2500 },
-  { emirate: "AJMAN", fee: 2500 },
-  { emirate: "UMM_AL_QUWAIN", fee: 2500 },
-  { emirate: "RAS_AL_KHAIMAH", fee: 3000 },
-  { emirate: "FUJAIRAH", fee: 3000 },
+  { emirate: "ABU_DHABI", fee: 1700 },
+  { emirate: "DUBAI", fee: 1700 },
+  { emirate: "SHARJAH", fee: 1700 },
+  { emirate: "AJMAN", fee: 1700 },
+  { emirate: "UMM_AL_QUWAIN", fee: 1700 },
+  { emirate: "RAS_AL_KHAIMAH", fee: 1700 },
+  { emirate: "FUJAIRAH", fee: 1700 },
 ] as const;
 
 export async function seedShipping(prisma: PrismaClient) {

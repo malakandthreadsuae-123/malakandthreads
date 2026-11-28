@@ -10,8 +10,8 @@ export const metadata = { title: "Brand" };
 const fields: FieldDef[] = [
   { name: "name", label: "Brand name", type: "text", required: true, half: true },
   { name: "slug", label: "URL slug", type: "text", half: true, help: "Leave blank to generate. Changing it creates a 301 redirect." },
-  { name: "logo", label: "Logo", type: "image", half: true },
-  { name: "image", label: "Banner / cover image", type: "image", half: true },
+  { name: "logo", label: "Logo", type: "image", half: true, help: "Optional. A PNG with a transparent background works best." },
+  { name: "image", label: "Brand photo", type: "image", half: true, help: "Shown on the brand card on the homepage and Brands page (a tall/portrait photo looks best). If empty, the newest product photo of this brand is used." },
   { name: "description", label: "Description", type: "textarea", rows: 3, help: "Do not claim official partnership or authorisation unless it is verified." },
   { name: "content", label: "SEO content (Markdown)", type: "markdown" },
   { name: "seoTitle", label: "SEO title", type: "text", max: 160 },

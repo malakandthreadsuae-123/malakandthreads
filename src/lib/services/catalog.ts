@@ -330,6 +330,23 @@ export async function getMenuCategories() {
   });
 }
 
+export type BrandCardData = { id: string; name: string; slug: string; logo: string | null; cover: string | null; count: number };
+
+/** Brands for cards: the uploaded brand image, else the newest live product photo of that brand. */
+export async function getBrandCards(opts: { featuredOnly?: boolean; take?: number } = {}): Promise<BrandCardData[]> {
+  const brands = await prisma.brand.findMany({
+    where: { isActive: true, ...(opts.featuredOnly ? { isFeatured: true } : {}) },
+    select: {
+      id: true, name: true, slug: true, logo: true, image: true,
+      _count: { select: { products: { where: { status: "ACTIVE" } } } },
+      products: { where: { status: "ACTIVE", images: { some: {} } }, orderBy: { createdAt: "desc" }, take: 1, select: { images: { orderBy: { sortOrder: "asc" }, take: 1, select: { url: true } } } },
+    },
+    orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
+    take: opts.take,
+  });
+  return brands.map((b) => ({ id: b.id, name: b.name, slug: b.slug, logo: b.logo, cover: b.image ?? b.products[0]?.images[0]?.url ?? null, count: b._count.products }));
+}
+
 export async function getActiveBrands() {
   return prisma.brand.findMany({
     where: { isActive: true },

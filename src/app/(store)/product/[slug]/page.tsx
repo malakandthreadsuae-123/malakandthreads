@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { deliveryNote } from "@/lib/delivery";
 import Link from "next/link";
 import { cache } from "react";
 import { prisma } from "@/lib/db";
@@ -114,8 +115,7 @@ export default async function ProductPage({ params }: Props) {
                     title: "Delivery",
                     content: (
                       <p>
-                        We deliver to all seven emirates. Standard delivery fee from {formatAED(shipping.fee)}
-                        {settings.freeShippingThreshold > 0 ? `, free on orders over ${formatAED(settings.freeShippingThreshold)}` : ""}. The exact fee for your emirate is shown at checkout. Cash on Delivery available.{" "}
+                        {deliveryNote(shipping.fee)}. We deliver to all seven emirates and the exact fee is shown at checkout. Cash on Delivery available.{" "}
                         <Link href="/shipping-policy" className="underline">Shipping policy</Link>
                       </p>
                     ),

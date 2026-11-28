@@ -66,3 +66,12 @@ export function resolveMediaPath(segments: string[]) {
   if (!abs.startsWith(root + path.sep)) return null;
   return abs;
 }
+
+/** Delete uploaded files (only /media/* URLs inside the upload root; missing files are ignored). */
+export async function deleteMediaFiles(urls: string[]) {
+  for (const url of urls) {
+    if (!url.startsWith("/media/")) continue;
+    const abs = resolveMediaPath(url.slice("/media/".length).split("/"));
+    if (abs) await fs.unlink(abs).catch(() => {});
+  }
+}

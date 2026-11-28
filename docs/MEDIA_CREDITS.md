@@ -39,3 +39,6 @@ Replace them any time via Admin → Banners → Hero (*Background video*) and Ad
 ## Brand assets
 
 `public/brand/logo-original.png` — the official MALAKAND THREADS brush-script logo supplied by the store owner. Every other brand file (`logo-black.png`, `logo-white.png`, `mark-white.png`, icons, `src/app/icon.png`, `src/app/apple-icon.png`, `src/app/favicon.ico`, `og-image.jpg`, `logo-square.png`) is generated from it with `node scripts/generate-brand-assets.mjs`. Fonts: Cormorant Garamond and Jost (SIL Open Font License, self-hosted via `next/font`).
+
+### Brand card photos
+The homepage / Brands page cards use stand-in images from `public/images/demo/` (Unsplash License, above), set by migration `20261128120000_brand_images`. They are generic fashion photos, not official brand imagery. Replace each one with your own photo in **Admin → Brands → Brand photo**.

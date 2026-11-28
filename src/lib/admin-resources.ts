@@ -6,7 +6,9 @@ import { prisma } from "./db";
 import { ApiError } from "./api";
 import { uniqueSlug } from "./services/admin-products";
 import { recordGone, recordSlugChange } from "./redirects";
-import { bannerInputSchema, blogInputSchema, brandInputSchema, categoryInputSchema, couponInputSchema, pageInputSchema } from "./validation";
+import { deleteMediaFiles } from "./uploads";
+import { feedbackImages } from "./feedback";
+import { bannerInputSchema, blogInputSchema, brandInputSchema, categoryInputSchema, couponInputSchema, feedbackAdminSchema, pageInputSchema } from "./validation";
 
 export const categoriesCrud = crud({
   model: "category",
@@ -66,17 +68,25 @@ export const bannersCrud = crud({
 
 export const testimonialsCrud = crud({
   model: "testimonial",
-  entity: "testimonial",
+  entity: "feedback",
   permission: PERMISSIONS.HOMEPAGE_WRITE,
-  schema: z.object({
-    name: z.string().trim().min(1).max(120),
-    location: z.string().trim().max(120).optional().nullable(),
-    text: z.string().trim().min(5).max(2000),
-    rating: z.coerce.number().int().min(1).max(5).optional().nullable(),
-    isActive: z.boolean().default(true),
-    sortOrder: z.coerce.number().int().default(0),
-  }),
-  orderBy: { sortOrder: "asc" },
+  schema: feedbackAdminSchema,
+  orderBy: { createdAt: "desc" },
+  prepare: (d, { existing }) => {
+    if (!existing && d.type === "CUSTOMER_TEXT") throw new ApiError(422, "INVALID_TYPE", "Website reviews are written by customers — choose WhatsApp screenshot or Admin review", { type: "Not allowed" });
+    if (existing && (existing.type === "CUSTOMER_TEXT") !== (d.type === "CUSTOMER_TEXT")) throw new ApiError(422, "INVALID_TYPE", "The type of a customer's website review cannot be changed", { type: "Not allowed" });
+    const data = { ...d, isActive: d.status === "APPROVED" && d.isActive };
+    if (existing?.type === "CUSTOMER_TEXT") {
+      // Genuine customer words, rating and photos are never edited by the store.
+      delete data.text;
+      delete data.rating;
+      delete data.images;
+      data.permissionConfirmed = true;
+    }
+    return data;
+  },
+  // Deleting feedback also deletes its uploaded screenshots (not shared with anything else).
+  beforeDelete: async (t) => deleteMediaFiles(feedbackImages(t.images)),
 });
 
 export const pagesCrud = crud({

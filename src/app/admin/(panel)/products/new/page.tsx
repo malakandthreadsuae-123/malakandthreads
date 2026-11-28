@@ -18,7 +18,7 @@ export default async function NewProductPage() {
         categories={categories}
         canDelete={false}
         initial={{
-          name: "", slug: "", sku: "", status: "DRAFT", brandId: "", categoryId: "", categoryIds: [], regularPrice: "", salePrice: "", costPrice: "",
+          name: "", slug: "", sku: "", status: "ACTIVE", brandId: "", categoryId: "", categoryIds: [], regularPrice: "", salePrice: "", costPrice: "",
           shortDescription: "", description: "", material: "", careInstructions: "", weightGrams: "", videoUrl: "",
           isFeatured: false, isBestSeller: false, isNewArrival: true, isTrending: false, isDemo: false, seoTitle: "", seoDescription: "", seoKeywords: "",
           images: [],

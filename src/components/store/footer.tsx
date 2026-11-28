@@ -6,6 +6,7 @@ import { NewsletterForm } from "./newsletter-form";
 import { CookieSettingsLink } from "./cookie-consent";
 import { whatsappLink } from "@/lib/whatsapp";
 import type { SiteSettings } from "@/lib/settings";
+import { deliveryNote } from "@/lib/delivery";
 
 type LinkItem = { href: string; label: string };
 
@@ -70,7 +71,7 @@ export function Footer({ settings, categories, pages }: { settings: SiteSettings
       <div className="container-luxe grid gap-2 py-10 lg:grid-cols-[1.5fr_1fr_1fr_1fr] lg:gap-12 lg:py-16">
         <div className="mb-6 lg:mb-0">
           <Logo light />
-          <p className="mt-5 max-w-sm text-[14px] leading-relaxed text-ivory/60">{settings.tagline}. Curated dresses, abayas, shawls and bags, delivered across all seven emirates.</p>
+          <p className="mt-5 max-w-sm text-[14px] leading-relaxed text-ivory/60">{settings.tagline}. Curated dresses, abayas, shawls and bags. {deliveryNote(settings.defaultShippingFee)}.</p>
           <ul className="mt-6 space-y-3 text-[14px]">
             <li>
               <a href={whatsappLink(settings.whatsappNumber, settings.whatsappWelcomeMessage)} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-ivory/80 hover:text-ivory">

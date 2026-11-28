@@ -143,31 +143,6 @@ export function BrandStrip({ title, subtitle, brands }: { title: string; subtitl
   );
 }
 
-export function Testimonials({ title, items }: { title: string; items: { id: string; name: string; location: string | null; text: string; rating: number | null }[] }) {
-  if (!items.length) return null; // never show placeholder or invented testimonials
-  return (
-    <section className="container-luxe py-20 sm:py-24" aria-label={title}>
-      <Reveal>
-        <SectionHeading eyebrow="Kind Words" title={title} align="center" />
-      </Reveal>
-      <div className="grid gap-6 md:grid-cols-3">
-        {items.slice(0, 3).map((t, i) => (
-          <Reveal key={t.id} delay={i * 0.1}>
-            <figure className="flex h-full flex-col rounded-sm border border-line bg-white p-8">
-              {t.rating && <Stars rating={t.rating} />}
-              <blockquote className="mt-5 flex-1 font-serif text-lg leading-relaxed">“{t.text}”</blockquote>
-              <figcaption className="mt-6 text-[12px] uppercase tracking-[0.2em] text-muted">
-                {t.name}
-                {t.location ? ` · ${t.location}` : ""}
-              </figcaption>
-            </figure>
-          </Reveal>
-        ))}
-      </div>
-    </section>
-  );
-}
-
 export function Gallery({ title, subtitle, images, instagramUrl }: { title: string; subtitle?: string | null; images: string[]; instagramUrl?: string }) {
   if (!images.length) return null;
   return (
@@ -243,7 +218,7 @@ export function NewsletterBand({ title, subtitle }: { title: string; subtitle?: 
 
 export function TrustBar({ freeThreshold, returnsDays }: { freeThreshold: number; returnsDays: number }) {
   const items = [
-    { Icon: Truck, title: "UAE-wide delivery", text: freeThreshold > 0 ? `Free on orders over ${formatAED(freeThreshold).replace(".00", "")}` : "To all seven emirates" },
+    { Icon: Truck, title: "AED 17 delivery across the UAE", text: freeThreshold > 0 ? `Free on orders over ${formatAED(freeThreshold).replace(".00", "")}` : "Charges may vary according to your location" },
     { Icon: CreditCard, title: "Cash on Delivery", text: "Or pay securely by card" },
     { Icon: RotateCcw, title: "Easy returns", text: `Within ${returnsDays} days of delivery` },
     { Icon: MessageCircle, title: "WhatsApp support", text: "Styling & sizing help" },
@@ -269,7 +244,7 @@ export function ServicePromise() {
   const items = [
     { Icon: BadgeCheck, title: "Carefully curated", text: "Every piece is selected for fabric, finish and fit." },
     { Icon: ShieldCheck, title: "Secure checkout", text: "Card payments are processed by a PCI-compliant provider — we never see your card number." },
-    { Icon: Truck, title: "Delivered to your door", text: "Delivery across Abu Dhabi, Dubai, Sharjah and all seven emirates, with order updates by email." },
+    { Icon: Truck, title: "Delivered to your door", text: "Delivery charges 17 dirham across UAE (charges may vary according to your location), with order updates by email." },
   ];
   return (
     <section className="container-luxe py-20" aria-label="Why shop with us">
