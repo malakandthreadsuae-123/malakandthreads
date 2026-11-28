@@ -7,7 +7,7 @@ import { getSettings } from "@/lib/settings";
 import { getBanners, getHomepageSections, getPage, getRecentPosts } from "@/lib/services/content";
 import { renderMarkdown } from "@/lib/markdown";
 import { whatsappLink } from "@/lib/whatsapp";
-import { getBrandCards, getProductsByFlag, getProductsInCategory } from "@/lib/services/catalog";
+import { getBrandCards, getHeroBrands, getProductsByFlag, getProductsInCategory } from "@/lib/services/catalog";
 import { buildMetadata, organizationLd, websiteLd } from "@/lib/seo";
 import { formatDate } from "@/lib/utils";
 import { Hero, type HeroData } from "@/components/store/hero";
@@ -18,6 +18,7 @@ import { Gallery, NewsletterBand, PromoBanners, SeasonalSplit, ServicePromise, W
 import { CategoryCircles, ProductTabs } from "@/components/store/home-extra";
 import { CategorySpotlight, ShopByPrice, TrustStrip } from "@/components/store/home-editorial";
 import { BrandWall } from "@/components/store/brand-wall";
+import { BrandHero } from "@/components/store/brand-hero";
 import { VideoStory } from "@/components/store/video-story";
 import { FaqSection } from "@/components/store/faq-section";
 import { CustomerFeedback } from "@/components/store/customer-feedback";
@@ -56,8 +57,11 @@ export default async function HomePage() {
       const cfg = (s.config ?? {}) as Cfg;
       const limit = Math.min(cfg.limit ?? 8, 16);
       switch (s.key) {
-        case "hero":
-          return <Hero key={s.key} hero={hero} />;
+        case "hero": {
+          // Brand showcase slider when brands are ticked "Show in homepage hero"; otherwise the video hero.
+          const slides = await getHeroBrands();
+          return slides.length ? <BrandHero key={s.key} slides={slides} /> : <Hero key={s.key} hero={hero} />;
+        }
         case "categories": {
           const slugs = cfg.slugs ?? [];
           const cats = await prisma.category.findMany({

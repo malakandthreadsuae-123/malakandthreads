@@ -1,4 +1,5 @@
 import "server-only";
+import type { HeroBrandSlide } from "@/components/store/brand-hero";
 import { prisma } from "@/lib/db";
 import { Prisma } from "@/generated/prisma/client";
 import { PAGE_SIZE } from "@/lib/constants";
@@ -333,6 +334,30 @@ export async function getMenuCategories() {
 export type BrandCardData = { id: string; name: string; slug: string; logo: string | null; cover: string | null; count: number };
 
 /** Brands for cards: the uploaded brand image, else the newest live product photo of that brand. */
+/** Brands shown as slides in the homepage hero (Admin → Brands → "Show in homepage hero"). */
+export async function getHeroBrands(): Promise<HeroBrandSlide[]> {
+  const brands = await prisma.brand.findMany({
+    where: { isActive: true, showInHero: true },
+    select: {
+      id: true, name: true, slug: true, image: true, heroImage: true, heroTagline: true, heroLink: true,
+      _count: { select: { products: { where: { status: "ACTIVE" } } } },
+      products: { where: { status: "ACTIVE", images: { some: {} } }, orderBy: { createdAt: "desc" }, take: 1, select: { images: { orderBy: { sortOrder: "asc" }, take: 1, select: { url: true } } } },
+    },
+    orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
+    take: 12,
+  });
+  return brands
+    .map((b) => ({
+      id: b.id,
+      name: b.name,
+      href: b.heroLink || `/brands/${b.slug}`,
+      tagline: b.heroTagline,
+      image: b.heroImage || b.image || b.products[0]?.images[0]?.url || null,
+      count: b._count.products,
+    }))
+    .filter((b): b is HeroBrandSlide => Boolean(b.image));
+}
+
 export async function getBrandCards(opts: { featuredOnly?: boolean; take?: number } = {}): Promise<BrandCardData[]> {
   const brands = await prisma.brand.findMany({
     where: { isActive: true, ...(opts.featuredOnly ? { isFeatured: true } : {}) },

@@ -280,6 +280,13 @@ model Brand {
   content        String?   @db.Text
   isActive       Boolean   @default(true)
   isFeatured     Boolean   @default(false)
+  /// Homepage hero slider: show this brand as a slide.
+  showInHero     Boolean   @default(false)
+  /// Hero slide photo (falls back to the brand photo).
+  heroImage      String?   @db.VarChar(500)
+  heroTagline    String?   @db.VarChar(200)
+  /// Optional custom button link (defaults to the brand page).
+  heroLink       String?   @db.VarChar(500)
   sortOrder      Int       @default(0)
   seoTitle       String?   @db.VarChar(160)
   seoDescription String?   @db.VarChar(320)

@@ -12,6 +12,10 @@ const fields: FieldDef[] = [
   { name: "slug", label: "URL slug", type: "text", half: true, help: "Leave blank to generate. Changing it creates a 301 redirect." },
   { name: "logo", label: "Logo", type: "image", half: true, help: "Optional. A PNG with a transparent background works best." },
   { name: "image", label: "Brand photo", type: "image", half: true, help: "Shown on the brand card on the homepage and Brands page (a tall/portrait photo looks best). If empty, the newest product photo of this brand is used." },
+  { name: "showInHero", label: "Show in homepage hero (brand slider at the top of the homepage)", type: "checkbox" },
+  { name: "heroImage", label: "Hero photo (optional)", type: "image", help: "A large, good-quality photo (at least 1200px). If empty, the brand photo above is used." },
+  { name: "heroTagline", label: "Hero tagline (optional)", type: "text", max: 200, help: "One short line under the brand name, e.g. “Festive edit — embroidered chiffon & lawn”." },
+  { name: "heroLink", label: "Hero button link (optional)", type: "text", help: "Leave empty to open this brand's page. Or e.g. /category/shawls or /sale." },
   { name: "description", label: "Description", type: "textarea", rows: 3, help: "Do not claim official partnership or authorisation unless it is verified." },
   { name: "content", label: "SEO content (Markdown)", type: "markdown" },
   { name: "seoTitle", label: "SEO title", type: "text", max: 160 },
@@ -40,7 +44,7 @@ export default async function BrandEdit({ params }: { params: Promise<{ id: stri
           deleteEndpoint={isNew ? undefined : `/api/admin/brands/${id}`}
           initial={{
             name: b?.name ?? "", slug: b?.slug ?? "", logo: b?.logo ?? "", image: b?.image ?? "", description: b?.description ?? "", content: b?.content ?? "",
-            seoTitle: b?.seoTitle ?? "", seoDescription: b?.seoDescription ?? "", sortOrder: b?.sortOrder ?? 0, isActive: b?.isActive ?? true, isFeatured: b?.isFeatured ?? false,
+            seoTitle: b?.seoTitle ?? "", seoDescription: b?.seoDescription ?? "", sortOrder: b?.sortOrder ?? 0, isActive: b?.isActive ?? true, isFeatured: b?.isFeatured ?? false, showInHero: b?.showInHero ?? false, heroImage: b?.heroImage ?? "", heroTagline: b?.heroTagline ?? "", heroLink: b?.heroLink ?? "",
           }}
         />
       </Card>

@@ -40,6 +40,10 @@
     from { transform: scale(1.08); }
     to { transform: scale(1); }
   }
+  @keyframes brand-progress {
+    from { width: 0%; }
+    to { width: 100%; }
+  }
   --animate-marquee: marquee 40s linear infinite;
   @keyframes marquee {
     from { transform: translateX(0); }

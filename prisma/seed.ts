@@ -198,7 +198,7 @@ const HOMEPAGE_SECTIONS: { key: string; title: string; subtitle?: string; sortOr
   { key: "dresses", title: "Women's Dresses", subtitle: "Maxi, festive and everyday dresses", sortOrder: 4, config: { category: "womens-dresses" } },
   { key: "shop_by_price", title: "Shop by Budget", sortOrder: 31, isEnabled: false },
   { key: "shawls", title: "Premium Shawls", subtitle: "Soft layers for cool evenings", sortOrder: 6, config: { category: "shawls" } },
-  { key: "brands", title: "Brand Collections", subtitle: "Explore collections by label", sortOrder: 1 },
+  { key: "brands", title: "Brand Collections", subtitle: "Explore collections by label", sortOrder: 37, isEnabled: false },
   { key: "bags", title: "Fashion Bags", subtitle: "From desk to dinner", sortOrder: 8, config: { category: "bags" } },
   { key: "seasonal", title: "Seasonal Collections", sortOrder: 32, isEnabled: false },
   { key: "featured", title: "Featured Pieces", subtitle: "Hand-picked by our stylists", sortOrder: 33, isEnabled: false, config: { limit: 8 } },
@@ -275,6 +275,7 @@ async function main() {
         image: b.image, // licensed Unsplash stand-in (docs/MEDIA_CREDITS.md) — replace in Admin → Brands
         sortOrder: i,
         isFeatured: true,
+        showInHero: true,
         description: `Browse ${b.name} label pieces available from MALAKAND THREADS in the UAE. MALAKAND THREADS is an independent retailer and is not an official ${b.name} store or authorised distributor unless stated on the product page.`,
         seoTitle: `${b.name} Collection UAE`,
         seoDescription: `Shop ${b.name} label women's fashion available from MALAKAND THREADS in the UAE. Prices in AED with Cash on Delivery.`,

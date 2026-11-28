@@ -29,10 +29,11 @@ export default async function StoreLayout({ children }: { children: React.ReactN
           Skip to content
         </a>
         {settings.announcementEnabled && settings.announcement && (
-          <div className="bg-charcoal py-2 text-center text-[10.5px] font-medium uppercase tracking-[0.16em] text-ivory/90 lg:hidden">
+          <div className="bg-charcoal py-2 text-center text-[11px] leading-snug tracking-[0.02em] text-ivory/90 lg:hidden">
             <div className="container-luxe">
               <Link href="/shipping-policy" className="hover:text-gold">
-                {settings.announcement}
+                {/* phones: first message only (e.g. the delivery note); desktop rotates all of them */}
+                {settings.announcement.split(/\s+[·|•]\s+/)[0]}
               </Link>
             </div>
           </div>
