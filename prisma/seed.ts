@@ -358,16 +358,6 @@ async function main() {
       update: {},
     });
   }
-  // SAMPLE feedback: labelled "Sample review" on the website, excluded from counts/ratings, removable in Admin → Customer feedback → Samples.
-  if ((await prisma.testimonial.count()) === 0) {
-    await prisma.testimonial.createMany({
-      data: [
-        { id: "fb_sample_1", name: "Ayesha K.", location: "Dubai", title: "Beautiful shawl", text: "The embroidered shawl is soft and warm, and the colours look even richer in person. Neatly packed too.", rating: 5, sortOrder: 90 },
-        { id: "fb_sample_2", name: "Mariam S.", location: "Sharjah", title: "Lovely stitching", text: "Lovely stitching on my dress and the fit was just right. I will definitely order again.", rating: 5, sortOrder: 91 },
-        { id: "fb_sample_3", name: "Fatima R.", location: "Abu Dhabi", title: "Helpful service", text: "They answered my sizing questions on WhatsApp quickly before I ordered. Very helpful.", rating: 4, sortOrder: 92 },
-      ].map((t) => ({ ...t, type: "SAMPLE" as const, status: "APPROVED" as const, isActive: true, permissionConfirmed: true })),
-    });
-  }
   if ((await prisma.banner.count()) === 0) {
     await prisma.banner.createMany({
       data: [
